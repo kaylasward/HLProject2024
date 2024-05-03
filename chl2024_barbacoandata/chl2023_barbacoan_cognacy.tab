@@ -1,0 +1,380 @@
+﻿	Awa Pit	Cha'palaa	Guambiano	Totoro	Tsafiki
+1-21. the land	45	45			45
+1-212. the soil	53	45	53	53	45
+1-214. the mud		62			62
+1-22. the mountain or hill	67		65	67	65
+1-28. the cave	66	76			76
+1-31. the water	84	84	84	84	84
+1-323. rough(2)		80			80
+1-324. the foam		73			73
+1-33. the lake		74	74		74
+1-36. the river or stream		81		81	81
+1-37. the spring or well			86	86	
+1-38. the swamp	87		110	110	87
+1-39. the waterfall		105	105		105
+1-41. the woods or forest		93			93
+1-411. the savanna		95	95		
+1-43. the wood		112			112
+1-44. the stone or rock	117	117	117	117	117
+1-51. the sky			122	122	
+1-52. the sun	128	128	127	127	
+1-53. the moon	113	113	113	113	113
+1-55. the lightning	119	118	118		118
+1-56. the thunder	124	140	123	123	140
+1-59. the rainbow			126	126	
+1-62. the darkness		129			
+1-72. the wind			139	139	
+1-73. the cloud	161		161	161	
+1-74. the fog	148	148	148	148	
+1-75. the rain		150	150	150	150
+1-81. the fire		160	159	159	160
+1-83. the smoke			163	163	
+1-84. the ash			189	189	
+1-88. the firewood	179	179	179	179	
+10-23. to fall		197	197	197	
+10-25. to throw	210	206	210		210
+10-253. to catch		254	254		
+10-32. to flow		240	240		
+10-35. to swim	217	217			
+10-37. to fly	228	229	228		229
+10-38. to blow	261	231	261	261	231
+10-41. to crawl		233			233
+10-43. to jump			264	264	
+10-44. to dance	239				240
+10-45. to walk		250	248		250
+10-46. to run			284	284	
+10-47. to go	253	253	253	253	253
+10-471. to go up	283	283	283		283
+10-472. to climb		258			258
+10-474. to go out		260			260
+10-48. to come	266	266	266	266	266
+10-481. to come back		268			268
+10-491. to disappear		271			271
+10-55. to arrive	273		273		
+10-57. to enter	309	310	282	282	310
+10-61. carry	279	278			278
+10-63. to send		296	295		296
+10-67. to push		329			329
+10-71. the road		331			331
+10-72. the path	297	297		297	297
+10-74. the bridge	298			298	
+11-11. to have	356	356			355
+11-14. to grasp		353			353
+11-15. to hold	321		321	321	
+11-16. to get		360			360
+11-21. to give	364	364	327	327	364
+11-32. to find	338	339			
+11-43. the money			420	420	
+11-81. to buy	352		352		
+12-011. behind	372	372			372
+12-013. at		420			419
+12-03. down	384	384			384
+12-04. before			391		390
+12-07. under	402		404		398
+12-08. up	405	410	406	411	
+12-081. above			493	493	
+12-12. to put	410	412	412		412
+12-13. to sit		505	478	478	505
+12-14. to lie down	421	421	421	421	421
+12-15. to stand	431		431		429
+12-27. to hide			446		446
+12-36. the side	463	463			
+12-37. the middle		464			464
+12-41. right(1)			474	474	
+12-42. left	469	475	469	469	475
+12-43. near		472	479		472
+12-44. far		484	479	479	484
+12-53. to grow		492			492
+12-55. big		495	588	588	495
+12-56. small		499	499	499	499
+12-57. long		566	567	567	566
+12-61. wide			509	510	
+12-62. narrow		515	514		
+12-63. thick				574	
+12-65. thin		524		521	
+12-73. straight	602		602		
+12-75. the hook		596			596
+12-81. round		547	545		
+12-82. the circle		546			546
+12-84. the line		606			606
+12-85. the hole		623	560	560	623
+12-92. similar		561			561
+13-01. one	564	564	630	630	564
+13-02. two	631	631	631	631	631
+13-03. three		569	569	569	569
+13-04. four		568	572	572	568
+13-05. five		640			640
+13-101. eleven		576	578		576
+13-102. twelve		578			578
+13-103. fifteen		578			578
+13-104. twenty			581		581
+13-15. many		597		597	
+13-17. few	600		603		
+13-181. some	601	601			
+13-21. full		678	729	729	678
+13-34. first		618			618
+13-35. last			622		622
+14-13. new		694	711	711	694
+14-15. old	641		715	715	641
+14-18. now	649			649	649
+14-19. immediately		648			647
+14-21. fast			734		734
+14-23. to hurry		659			
+14-35. again	659	659			
+14-41. the day(1)		748			748
+14-42. the night	674	679	674	674	679
+14-43. the dawn		688			686
+14-44. the morning		681			681
+14-47. today	688	688	688	688	688
+14-48. tomorrow		783			783
+14-49. yesterday	701	700			700
+15-21. to smell(1)	702	703	703	703	702
+15-37. bitter		720			720
+15-38. sour		723			722
+15-41. to hear	723	723	723	723	723
+15-42. to listen	724	724	724		724
+15-44. the sound or noise		718			717
+15-46. quiet		719			719
+15-51. to see	721	730	721	721	730
+15-52. to look		730			730
+15-55. to show		728			728
+15-56. to shine		737			737
+15-64. white		745	744	744	745
+15-65. black		746	747	747	746
+15-66. red		749	856	856	749
+15-67. blue		759			759
+15-69. yellow	872	872	871	871	
+15-71. to touch		875			875
+15-72. to feel		937			937
+15-75. soft		870			
+15-77. smooth	785				783
+15-78. sharp	791	790	791		790
+15-81. heavy		796			796
+15-83. wet	809		892	891	810
+15-84. dry	912		912	806	
+15-85. hot			983	983	
+15-86. cold		984			984
+15-88. dirty			981	981	
+16-25. to laugh	831		831		
+16-26. to play	841				842
+16-29. to kiss		846			843
+16-37. to cry		945	946	946	945
+16-38. the tear	947	947			947
+16-53. the fear		959			959
+16-62. to want		1044			1044
+16-81. beautiful	899	892			891
+17-13. to think(1)	894	898			898
+17-17. to know		998			998
+17-24. to learn		907			907
+17-25. to teach		1023			1023
+17-32. to forget		1029	1029		1029
+17-51. and		916			916
+17-61. how?	1042	924	1042		924
+17-62. how many?		926			926
+17-64. what?	1054	1054	1054	1054	1054
+17-65. when?		943	1041	1041	943
+17-66. where?	939	940		939	940
+17-67. which?		949			948
+17-68. who?	1068	1068	1068	1068	1068
+18-13. to shout		954			954
+18-21. to speak or talk	1067	1067			1067
+18-22. to say	1081	1081	1081		1081
+18-221. to tell			1083	1083	
+18-23. to be silent		968			968
+18-28. the name	1167	1167	1167		1167
+18-31. to ask(1)			980		980
+18-51. to write	1096	1096	1096	1096	1096
+18-52. to read	986			986	
+18-56. the paper		1181	1181	1181	
+18-71. the flute	996	999			
+18-72. the drum	999	999		1007	
+19-21. the people		1118	1119	1119	1118
+19-24. the chieftain			1009	1009	
+2-1. the person		1212			1212
+2-21. the man			1214	1214	
+2-22. the woman	1022	1022	1020	1020	1023
+2-23. male(1)			1027	1024	
+2-27. the child(1)			1034	1034	1034
+2-28. the baby		1158	1158		1158
+2-31. the husband			1160	1160	
+2-32. the wife	1163	1163		1049	1049
+2-35. the father		1183	1184	1184	1183
+2-36. the mother			1187	1187	
+2-41. the son			1066	1066	
+2-42. the daughter		1067	1064	1064	
+2-44. the brother			1276	1276	
+2-45. the sister			1077	1077	
+2-461. the old man			1088	1088	
+2-471. the old woman	1092	1092			1092
+2-48. the grandson	1099	1099			
+2-5. the grandchild	1101	1101			
+2-73. the stepson		1128	1127		
+2-91. I	1266		1266		
+2-92. you (singular)	1268	1269	1268	1269	1268
+2-93. he/she/it			1346		
+2-931. he		1358			1358
+2-94. we			1351	1351	
+2-95. you (plural)		1144	1143	1143	1144
+2-96. they		1367	1368		1367
+20-11. to fight	1155	1155			
+20-54. the fishnet		1168	1159		1166
+21-51. to steal	1164		1167		
+21-52. the thief			1168	1168	
+24-01. to be	1189		1189		
+24-04. with		1189	1189		1189
+24-06. not	1198		1339	1339	1198
+24-07. this	1206			1206	1206
+24-08. that	1350	1350			1350
+24-09. here	1207	1207	1356	1356	
+24-1. there	1229	1228	1229	1228	1227
+24-11. other	1227		1217	1214	1229
+24-14. agouti	1225	1225			1225
+3-32. the boar		1247			
+3-581. the bird	1245	1242	1471	1471	1242
+3-585. the hawk	1245			1247	
+3-591. the bat		1248			1248
+3-61. the dog	1416	1416	1415	1415	
+3-62. the cat		1405			
+3-63. the mouse or rat		1512	1513	1513	1512
+3-75. the deer	1290	1426	1290	1290	1426
+3-811. the head louse	1291	1291		1291	1291
+3-813. the flea		1298	1299	1299	1298
+3-817. the ant	1314	1309	1307	1302	1308
+3-818. the spider	1309				1307
+3-82. the bee	1311		1308	1308	
+3-83. the fly			1320	1320	1321
+3-832. the mosquito	1325	1329	1328	1325	
+3-834. the termites	1332	1334			
+3-84. the worm		1342	1336	1336	1342
+3-85. the snake		1585	1598	1598	1585
+3-9. the jaguar		1501			1501
+3-92. the butterfly		1504			1504
+3-95. the frog			1363	1363	
+4-11. the body			1514	1514	
+4-12. the skin or hide		1367	1517	1517	1369
+4-14. the hair	1523	1523			1523
+4-144. the body hair		1523	1523	1523	1523
+4-15. the blood		1531	1640	1640	1531
+4-151. the vein or artery			1384		1384
+4-16. the bone	1655		1654	1654	1655
+4-17. the horn	1406		1403	1403	
+4-18. the tail	1393		1393	1393	1393
+4-19. the back	1396	1396		1396	1396
+4-2. the head	1405	1406			1406
+4-204. the face			1565	1565	
+4-209. the chin			1420	1420	
+4-21. the eye	1422	1422	1422	1422	1422
+4-214. the eyelash	1431		1432		
+4-22. the ear	1429	1436	1429	1429	1436
+4-23. the nose	1428	1428	1428	1428	
+4-24. the mouth		1439	1439	1439	1439
+4-25. the lip		1442	1626	1626	1442
+4-26. the tongue		1445	1445	1445	
+4-27. the tooth	1460	1460	1460	1460	
+4-272. the molar tooth		1466		1461	
+4-28. the neck		1641	1741	1741	1641
+4-29. the throat		1644			1644
+4-3. the shoulder			1648	1648	
+4-31. the arm	1472		1473	1473	
+4-32. the elbow			1477	1478	
+4-34. the finger		1659			1659
+4-344. the fingernail		1511	1511	1511	
+4-345. the claw		1510	1510		
+4-35. the leg	1503			1505	
+4-352. the calf of the leg		1522	1522		
+4-37. the foot	1519		1518	1518	
+4-38. the toe	1527	1516	1526		1516
+4-393. the feather			1534	1534	
+4-4. the chest	1533				1533
+4-41. the breast			1723	1723	
+4-412. the nipple or teat			1726	1726	
+4-43. the navel			1539	1539	
+4-44. the heart	1847	1555	1739	1739	1555
+4-441. the lung	1550	1550			1558
+4-45. the liver		1565	1557	1559	1556
+4-46. the stomach	1567	1567	1567		
+4-461. the intestines or guts	1566	1566	1566	1566	1566
+4-464. the buttocks		1574	1574	1574	1574
+4-49. the testicles		1584			1584
+4-493. the vagina		1885			1885
+4-494. the vulva	1588			1588	
+4-521. to hiccough		1599			
+4-57. to vomit	1613	1613	1791	1791	1613
+4-61. to sleep		1800	1913	1913	1800
+4-62. to dream		1913			1913
+4-64. to fart		1631			1631
+4-69. to bathe		1633	1633	1633	1633
+4-72. to be born	1833	1833			1643
+4-73. pregnant		1638			1638
+4-74. to be alive		1638	1840	1840	1639
+4-75. to die	1662	1650	1651	1651	1650
+4-7501. dead		1645			1645
+4-76. to kill		1655	1649	1649	1655
+4-78. to bury		1841			1841
+4-841. the fever		1668	1669		
+4-87. the physician			1883	1883	
+5-11. to eat		1694	2013	2013	1694
+5-12. the food			2010	2010	
+5-123. ripe		1707	1706	1708	1707
+5-125. rotten	1718	1718	1904	1904	1718
+5-13. to drink	1718		1716	1716	1718
+5-16. to suck	1721				1721
+5-21. to cook	1732	1732	1736	1736	
+5-26. the pot	1742	1742	1744	1744	
+5-32. the plate			1740	1740	
+5-51. the bread			1749	1749	
+5-61. the meat			1764	1764	
+5-7. the potato		2096	1783	1783	2096
+5-71. the fruit		1774	1962	1962	1774
+5-791. the grease or fat		1981			1981
+5-81. the salt			1987	1987	
+5-821. the chili pepper		1788	1992	1992	1788
+5-86. the milk			1792	1792	1793
+5-97. the egg	1795	1795	1986	1986	1795
+6-24. the cotton		2011			2011
+6-28. the fur		1799			1799
+6-29. the leather		1822			1823
+6-33. to weave			1809	1809	
+6-55. the hat or cap			2028	2028	
+7-11. to live			2038	2038	
+7-12. the house	1846	1846	1846	1846	
+7-22. the door or gate			2061	2061	
+7-26. the floor			2063	2063	
+7-42. the bed			2071	2071	
+7-46. the candle			2064	2064	
+7-51. the roof	1880	1880	1880		
+8-13. the garden	1884		1884	1884	
+8-22. to dig		1887		1887	
+8-28. the digging stick (=yamstick)	1893		1893	1893	1893
+8-31. to sow	1892	1892		1892	
+8-311. the seed		2251	2252	2252	2251
+8-47. the maize/corn	1912	1912	2250	2250	1912
+8-54. the root		1917	2128	2128	1917
+8-56. the leaf	1919	1919	2133	2133	
+8-57. the flower			2139	2139	
+8-6. the tree	1938	1938	1939	1939	1938
+8-6. tree			1938		
+8-68. the tobacco	2299		2299	2299	
+8-69. to smoke		1943	1942		
+8-75. the bark		2179	2162	2162	2178
+8-76. the sap	1953	1951		1953	1951
+8-81. the palm tree		1964			
+8-92. the cassava/manioc	1955	1955	2324	2324	1955
+8-93. the gourd	1963			1963	
+8-941. the sugar cane		1980			1980
+9-11. to do	1982	1982			1982
+9-111. to make		1988			1988
+9-16. to tie	1990	1983	1989	1989	1983
+9-19. the rope	1997		1997		
+9-21. to hit			2009	2009	
+9-21. to strike or hit or beat	2017	2014	2014		2014
+9-22. to cut			2012	2012	2012
+9-221. to cut down		2016			2016
+9-25. the axe/ax			2258	2258	
+9-27. to split	2030		2030		
+9-31. to rub	2035	2035	2256	2256	
+9-33. to pull			2049	2049	2047
+9-341. to hang up	2051	2051			
+9-342. to press		2062			
+9-36. to wash		2076	2077		2077
+9-78. the netbag			2079	2079	

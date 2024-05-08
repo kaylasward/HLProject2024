@@ -99,3 +99,4 @@ class AutoCorrect:
                 word_chars.append(char)
 
         return word_chars
+#comment

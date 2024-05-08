@@ -100,3 +100,4 @@ class AutoCorrect:
 
         return word_chars
 #comment
+#another comment

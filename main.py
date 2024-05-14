@@ -19,14 +19,16 @@ eau_forms = TabFileReader.tab_reader(
 ie_cognacy = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_cognacy.tab")
 ie_forms = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_forms.tab")
 
+#####
+
 df_word_list = TabFileReader.get_word_list(barb_forms)
 alphabet = TabFileReader.get_alphabet(df_word_list)
 
 calcedit = CalcEdit(df_word_list, alphabet)
+score_list = calcedit.get_all_dl_distances(barb_forms)
 
-x = calcedit.is_cognate_("su", threshold=1)
 
 print()
 print("ANSWER")
-for row in x:
-    print(row)
+for item in score_list:
+    print(item)

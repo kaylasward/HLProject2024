@@ -13,7 +13,34 @@ class CalcEdit:
                 cognates.append(("score: " + str(dl_distance), word, operations))
         return cognates
 
-    def calculate_dl_distance(self, input_word1, input_word2, dist_limit=1):
+    def get_all_dl_distances(self, data_df):
+        all_word_scores = []
+        for index, row in data_df.iterrows():
+            row_dict = {}
+
+            index_word = data_df.iloc[index, 0]
+            index_word = index_word.split()
+            index_word = " ".join(index_word[1:])
+            row_dict["EnglishWord"] = index_word
+
+            threshold = 100
+            tokens = row[1:]
+            row_dict["cognates"] = []
+            for word1 in tokens:
+                for word2 in tokens:
+                    if word1 != "" and word2 != "":
+                        dl_distance, operations = self.calculate_dl_distance(
+                            word1, word2, threshold=threshold
+                        )
+                        if 0 < dl_distance <= threshold:
+                            row_dict["cognates"].append(
+                                {"word1": word1, "word2": word2, "score": dl_distance}
+                            )
+            all_word_scores.append(row_dict)
+
+        return all_word_scores
+
+    def calculate_dl_distance(self, input_word1, input_word2, threshold=1):
         word1 = [""]
         word2 = [""]
 
@@ -23,7 +50,7 @@ class CalcEdit:
         word2.extend(self.__deconstruct_str(input_word2))
 
         # if the size difference is more than the limit, it's not worth checking
-        if abs(len(word1) - len(word2)) > dist_limit:
+        if abs(len(word1) - len(word2)) > threshold:
             return -1, []
 
         # init dl matrix and operation matrix

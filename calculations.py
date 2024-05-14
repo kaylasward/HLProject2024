@@ -13,7 +13,7 @@ class CalcEdit:
                 cognates.append(("score: " + str(dl_distance), word, operations))
         return cognates
 
-    def get_all_dl_distances(self, data_df):
+    def get_all_dl_distances(self, data_df, threshold=100):
         all_word_scores = []
         language_names = data_df.iloc[0].values.tolist()
 
@@ -25,7 +25,6 @@ class CalcEdit:
             index_word = " ".join(index_word[1:])
             row_dict["EnglishWord"] = index_word
 
-            threshold = 100
             row_dict["cognates"] = []
 
             tokens = [

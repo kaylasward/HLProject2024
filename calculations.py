@@ -2,6 +2,7 @@ class CalcEdit:
     def __init__(self, word_list, alpha):
         self.lexicon = word_list
         self.alphabet = list(alpha)
+        #placeholder: substitution table for directed distance between phonenmes
 
     def is_cognate_(self, input_word, threshold=1):
         cognates = []
@@ -12,6 +13,29 @@ class CalcEdit:
             if dl_distance <= threshold and dl_distance != -1:
                 cognates.append(("score: " + str(dl_distance), word, operations))
         return cognates
+
+    def get_distance_matrix(self, cognates:list)->list:
+        """
+        Generates a 2d distance matrix between all proposed cognates for a given concept regularized by
+        the length of the longer string in each comparison. These are stored in cells of an n by n matrix.
+        Missing entries in cognate pairs are stored as nan values.
+
+        Args:
+            cognates (list): list of proposed cognates to be compared with eachother.
+
+        Returns:
+            list: n x n distance list 
+        """
+        distance_matrix = [[0 for i in range(len(cognates))] for j in range(len(cognates))]               
+        
+        for i,source in enumerate(cognates):
+            for j,target in enumerate(cognates):
+                if source == "" or target == "":   #if one cognate in pair is missing, null value
+                    distance_matrix[i][j] = float("nan")
+                else:
+                    distance_matrix[i][j] = self.calculate_dl_distance(source,target,1000)[0]/max(len(source),len(target))
+        
+        return distance_matrix
 
     def get_all_dl_distances(self, data_df, threshold=100):
         all_word_scores = []

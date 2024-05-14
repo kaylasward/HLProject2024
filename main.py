@@ -45,4 +45,4 @@ score_list = calcedit.get_all_dl_distances(barb_forms)
 
 from scoring import Scoring
 ie_scoring = Scoring(score_list, ie_cognacy)
-ie_scoring.iterate_over_scoretable()
+ie_scoring.iterate_over_goldtable()

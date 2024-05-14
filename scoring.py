@@ -7,6 +7,8 @@ class Scoring:
         self.threshold = threshold
 
     def transform_scorelist(self):
+        """This function is supposed to transform the scorelist into a dictionary with
+        concept: list of pairs that are cognates. It doesn't work yet."""
         gen_cognates = dict()
         for concept in self.scorelist:
             true_cognates = []
@@ -20,12 +22,18 @@ class Scoring:
             concept_name = concept['EnglishWord']
             gen_cognates[concept_name] = true_cognates
         print(gen_cognates)
+        return gen_cognates
 
     
-    def iterate_over_goldtable(self):
+    def transform_goldtable(self):
+        """Transforms the gold df into a dict {concept: lst of pairs that are cognates}.
+        A problem we still need to solve is transitivity - if a,b and b,c are cognates, a,c are too"""
+        gold_cognates = dict()
         for row in range(len(self.goldfile)):
+            true_cognates = []
             for col in range(len(self.goldfile.loc[row])-1):
                 if row != 0 and col != 0:
-                    word = self.goldfile.loc[row, col]
-                    #if self.goldfile.loc[row, col] == self.goldfile.loc[row, col+1]:
-                    # How to save the cognacy data?
+                    if self.goldfile.loc[row, col] == self.goldfile.loc[row, col+1]:
+                       true_cognates.append((col,col+1))
+                    gold_cognates[row] = true_cognates
+        print(gold_cognates)

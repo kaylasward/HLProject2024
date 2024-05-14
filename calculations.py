@@ -17,7 +17,7 @@ class CalcEdit:
         word1 = [""]
         word2 = [""]
 
-        print(input_word2)
+        # print(input_word2)
 
         word1.extend(self.__deconstruct_str(input_word1))
         word2.extend(self.__deconstruct_str(input_word2))
@@ -84,11 +84,11 @@ class CalcEdit:
         # remove extra thing
         operations = operations[1:]
 
-        for row in dl_matrix:
-            print(row)
-        print("Operations Matrix:")
-        for row in op_matrix:
-            print(row)
+        # for row in dl_matrix:
+        #     print(row)
+        # print("Operations Matrix:")
+        # for row in op_matrix:
+        #     print(row)
 
         return dl_matrix[-1][-1], operations
 

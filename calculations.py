@@ -10,7 +10,7 @@ class CalcEdit:
                 input_word, word, threshold
             )
             if dl_distance <= threshold and dl_distance != -1:
-                cognates.append((word, operations))
+                cognates.append(("score: " + str(dl_distance), word, operations))
         return cognates
 
     def calculate_dl_distance(self, input_word1, input_word2, dist_limit=1):

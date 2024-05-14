@@ -6,26 +6,18 @@ class Scoring:
         self.cognacy_matrix = cognacy_matrix
         self.threshold = threshold
 
-    def accuracy(self):
+    def iterate_over_scoretable(self):
         for concept in self.cognacy_matrix:
-            for cognates in concept:
-                print(cognates)
+            cognates = concept['cognates']
+            print("New concept!")
+            for cognate_pair in cognates:
+                if cognate_pair['score'] <= self.threshold:
+
     
-    def gold_table(self):
+    def iterate_over_goldtable(self):
         for row in range(len(self.goldfile)):
             for col in range(len(self.goldfile.loc[row])-1):
                 if row != 0 and col != 0:
                     word = self.goldfile.loc[row, col]
                     #if self.goldfile.loc[row, col] == self.goldfile.loc[row, col+1]:
                     # How to save the cognacy data?
-    
-
-
-
-
-if __name__ == '__main__':
-    from read_tab_files import TabFileReader
-    from main import score_list
-    ie_cognacy = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_cognacy.tab")
-    ie_scoring = Scoring(ie_cognacy, score_list)
-    ie_scoring.accuracy()

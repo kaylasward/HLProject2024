@@ -39,7 +39,7 @@ class CalcEdit:
                                 "word1": word1,
                                 "word2": word2,
                                 "score": dl_distance,
-                                "operations": operations,
+                                # "operations": operations,
                             }
                         )
             all_word_scores.append(row_dict)

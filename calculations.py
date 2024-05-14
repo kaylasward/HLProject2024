@@ -15,6 +15,8 @@ class CalcEdit:
 
     def get_all_dl_distances(self, data_df):
         all_word_scores = []
+        language_names = data_df.iloc[0].values.tolist()
+
         for index, row in data_df.iterrows():
             row_dict = {}
 
@@ -24,12 +26,17 @@ class CalcEdit:
             row_dict["EnglishWord"] = index_word
 
             threshold = 100
-            tokens = row[1:]
             row_dict["cognates"] = []
 
-            tokens = [token for token in tokens if token != ""]
-            for i, word1 in enumerate(tokens):
-                for word2 in tokens[i + 1 :]:
+            tokens = [
+                (data_df.columns[i + 1], token)
+                for i, token in enumerate(row[1:])
+                if token != ""
+            ]
+
+            for i, (lang1_id, word1) in enumerate(tokens):
+                for j, (lang2_id, word2) in enumerate(tokens[i + 1 :]):
+
                     dl_distance, operations = self.calculate_dl_distance(
                         word1, word2, threshold=threshold
                     )
@@ -37,7 +44,9 @@ class CalcEdit:
                         row_dict["cognates"].append(
                             {
                                 "word1": word1,
+                                "lang1": language_names[lang1_id],
                                 "word2": word2,
+                                "lang2": language_names[lang2_id],
                                 "score": dl_distance,
                                 # "operations": operations,
                             }

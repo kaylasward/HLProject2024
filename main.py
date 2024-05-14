@@ -38,11 +38,12 @@ score_list = calcedit.get_all_dl_distances(barb_forms)
         print(cognate_pair["word1"])"""
 
 
-#print()
-#print("ANSWER")
+# print()
+# print("ANSWER")
 # for item in score_list:
 #     print(item)
 
 from scoring import Scoring
+
 ie_scoring = Scoring(score_list, ie_cognacy)
 ie_scoring.iterate_over_goldtable()

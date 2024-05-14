@@ -19,6 +19,9 @@ eau_forms = TabFileReader.tab_reader(
 ie_cognacy = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_cognacy.tab")
 ie_forms = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_forms.tab")
 
+df_word_list = TabFileReader.get_word_list(barb_forms)
+print(df_word_list)
+
 
 word_list = ["casa", "house", "casa", "haus", "maison", "hamburger", "hus"]
 alphabet = "abcdefghijklmnopqrstuvwxyz"

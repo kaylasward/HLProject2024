@@ -12,8 +12,9 @@ class TabFileReader:
         for column in data_df.columns[1:]:
             # row
             for index in data_df.index:
-                token = data_df.at[index, column]
-                df_word_list.append(token)
+                if index != 0:
+                    token = data_df.at[index, column]
+                    df_word_list.append(token)
 
         df_word_list = list(filter(None, df_word_list))
 

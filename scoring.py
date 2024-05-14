@@ -37,3 +37,4 @@ class Scoring:
                        true_cognates.append((col,col+1))
                     gold_cognates[row] = true_cognates
         print(gold_cognates)
+        return gold_cognates

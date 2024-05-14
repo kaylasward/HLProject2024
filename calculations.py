@@ -26,21 +26,22 @@ class CalcEdit:
             threshold = 100
             tokens = row[1:]
             row_dict["cognates"] = []
-            for word1 in tokens:
-                for word2 in tokens:
-                    if word1 != "" and word2 != "":
-                        dl_distance, operations = self.calculate_dl_distance(
-                            word1, word2, threshold=threshold
+
+            tokens = [token for token in tokens if token != ""]
+            for i, word1 in enumerate(tokens):
+                for word2 in tokens[i + 1 :]:
+                    dl_distance, operations = self.calculate_dl_distance(
+                        word1, word2, threshold=threshold
+                    )
+                    if 0 < dl_distance <= threshold:
+                        row_dict["cognates"].append(
+                            {
+                                "word1": word1,
+                                "word2": word2,
+                                "score": dl_distance,
+                                "operations": operations,
+                            }
                         )
-                        if 0 < dl_distance <= threshold:
-                            row_dict["cognates"].append(
-                                {
-                                    "word1": word1,
-                                    "word2": word2,
-                                    "score": dl_distance,
-                                    "operations": operations,
-                                }
-                            )
             all_word_scores.append(row_dict)
 
         return all_word_scores

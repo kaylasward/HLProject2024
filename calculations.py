@@ -34,7 +34,12 @@ class CalcEdit:
                         )
                         if 0 < dl_distance <= threshold:
                             row_dict["cognates"].append(
-                                {"word1": word1, "word2": word2, "score": dl_distance}
+                                {
+                                    "word1": word1,
+                                    "word2": word2,
+                                    "score": dl_distance,
+                                    "operations": operations,
+                                }
                             )
             all_word_scores.append(row_dict)
 

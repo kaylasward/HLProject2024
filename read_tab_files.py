@@ -6,6 +6,20 @@ class TabFileReader:
         pass
 
     @staticmethod
+    def get_word_list(data_df):
+        df_word_list = []
+        # cols
+        for column in data_df.columns[1:]:
+            # row
+            for index in data_df.index:
+                token = data_df.at[index, column]
+                df_word_list.append(token)
+
+        df_word_list = list(filter(None, df_word_list))
+
+        return df_word_list
+
+    @staticmethod
     def tab_reader(path):
         data = []
         with open(path) as cognacy_f:

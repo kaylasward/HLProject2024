@@ -20,19 +20,13 @@ ie_cognacy = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_cognacy.tab
 ie_forms = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_forms.tab")
 
 df_word_list = TabFileReader.get_word_list(barb_forms)
-print(df_word_list)
+alphabet = TabFileReader.get_alphabet(df_word_list)
 
+calcedit = CalcEdit(df_word_list, alphabet)
 
-word_list = ["casa", "house", "casa", "haus", "maison", "hamburger", "hus"]
-alphabet = "abcdefghijklmnopqrstuvwxyz"
-
-calcedit = CalcEdit(word_list, alphabet)
-x = calcedit.is_cognate_("haus", threshold=4)
+x = calcedit.is_cognate_("su", threshold=1)
 
 print()
 print("ANSWER")
 for row in x:
     print(row)
-
-
-# for each row, check the word against all words, and check against the legit one to see how many it caught

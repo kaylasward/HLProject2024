@@ -27,3 +27,16 @@ class TabFileReader:
                 line = line[:-1].split("\t")
                 data.append(line)
         return pd.DataFrame(data)
+
+    @staticmethod
+    def get_alphabet(word_list):
+        # extract all letters
+        letters = sorted([letter for word in word_list for letter in word])
+
+        # extract unique
+        unique_letters = set(letters)
+
+        # sort them
+        sorted_letters_string = "".join(unique_letters)
+
+        return sorted_letters_string

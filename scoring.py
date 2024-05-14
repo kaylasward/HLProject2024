@@ -7,14 +7,15 @@ class Scoring:
         self.threshold = threshold
 
     def accuracy(self):
-        for i in self.cognacy_matrix:
-            print(i)
+        for concept in self.cognacy_matrix:
+            for cognates in concept:
+                print(cognates)
     
     def gold_table(self):
         for row in range(len(self.goldfile)):
             for col in range(len(self.goldfile.loc[row])-1):
                 if row != 0 and col != 0:
-                    print(self.goldfile.loc[row, col])
+                    word = self.goldfile.loc[row, col]
                     #if self.goldfile.loc[row, col] == self.goldfile.loc[row, col+1]:
                     # How to save the cognacy data?
     

@@ -1,17 +1,25 @@
 import pandas as pd
 
 class Scoring:
-    def __init__(self, cognacy_matrix, goldfile, threshold=4):
+    def __init__(self, scorelist, goldfile, threshold=4):
         self.goldfile = goldfile
-        self.cognacy_matrix = cognacy_matrix
+        self.scorelist = scorelist
         self.threshold = threshold
 
-    def iterate_over_scoretable(self):
-        for concept in self.cognacy_matrix:
+    def transform_scorelist(self):
+        gen_cognates = dict()
+        for concept in self.scorelist:
+            true_cognates = []
             cognates = concept['cognates']
             print("New concept!")
             for cognate_pair in cognates:
                 if cognate_pair['score'] <= self.threshold:
+                    true_cognates.append('?') # Here, I would like to add info on what column the words come from
+                    # However, the score list does not contain info of whoch column/language the concept is from,
+                    # only the form
+            concept_name = concept['EnglishWord']
+            gen_cognates[concept_name] = true_cognates
+        print(gen_cognates)
 
     
     def iterate_over_goldtable(self):

@@ -1,33 +1,11 @@
 class LevenshteinDistanceCalculator:
-    def __init__(self, word_list, alpha):
+    def __init__(self, alpha):
         """
         Args:
-            word_list (list): A list of words used for finding cognates.
             alpha (str): A string representing the alphabet used in the word list.
         """
-        self.lexicon = word_list
         self.alphabet = list(alpha)  # convert alpha string to list
         # placeholder: substitution table for directed distance between phonenmes
-
-    def is_cognate_(self, input_word, threshold=1):
-        """
-        Determines possible cognates within the lexicon for a given word based on the Damerau-Levenshtein distance.
-
-        Args:
-            input_word (str): The word to compare against the lexicon.
-            threshold (int): The maximum allowed distance to consider a word a cognate.
-
-        Returns:
-            list: A list of tuples with the distance score, the cognate word, and the operations needed to convert input_word to the cognate.
-        """
-        cognates = []
-        for word in self.lexicon:
-            dl_distance, operations = self.calculate_dl_distance(
-                input_word, word, threshold
-            )
-            if dl_distance <= threshold and dl_distance != -1:
-                cognates.append(("score: " + str(dl_distance), word, operations))
-        return cognates
 
     def get_distance_matrix(self, cognates: list) -> list:
         """

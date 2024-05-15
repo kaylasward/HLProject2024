@@ -28,21 +28,6 @@ calcedit = LevenshteinDistanceCalculator(df_word_list, alphabet)
 score_list = calcedit.get_all_dl_distances(barb_forms)
 
 
-# example TODO - remove eventually
-
-"""for item in score_list:
-    english_word = item["EnglishWord"]
-    cognates = item["cognates"]
-
-    for cognate_pair in cognates:
-        print(cognate_pair["word1"])"""
-
-
-# print()
-# print("ANSWER")
-# for item in score_list:
-#     print(item)
-
 from scoring import Scoring
 
 ie_scoring = Scoring(score_list, ie_cognacy)

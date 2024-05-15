@@ -54,6 +54,9 @@ class LevenshteinDistanceCalculator:
 
         Returns:
             list: A list containing dictionaries for each row in the DataFrame with the word, cognates, and their scores.
+                Ex: [{'lexeme': 'the land',
+                    'cognates': [{'word1': 'su', 'lang1': 'Awa Pit', 'word2': 'to', 'lang2': 'Tsafiki', 'score': 1.0},
+                                {'word1': 'tu', 'lang1': "Cha'palaa", 'word2': 'to', 'lang2': 'Tsafiki','score': 1.0}]}]
         """
         all_word_scores = []
         language_names = data_df.iloc[0].values.tolist()
@@ -64,8 +67,7 @@ class LevenshteinDistanceCalculator:
             index_word = data_df.iloc[index, 0]
             index_word = index_word.split()
             index_word = " ".join(index_word[1:])
-            row_dict["EnglishWord"] = index_word
-
+            row_dict["lexeme"] = index_word
             row_dict["cognates"] = []
 
             tokens = [

@@ -1,11 +1,19 @@
+import panphon.distance
+
+
 class LevenshteinDistanceCalculator:
-    def __init__(self, alpha):
+    def __init__(self, alpha, use_phonetic=False):
         """
         Args:
             alpha (str): A string representing the alphabet used in the word list.
+            use_phonetic (bool): Uses a phonetic distance instead of 1 for the cost during calculation if true
         """
         self.alphabet = list(alpha)  # convert alpha string to list
+        self.use_phonetic = use_phonetic
+
         # placeholder: substitution table for directed distance between phonenmes
+
+        self.distance = panphon.distance.Distance()
 
     def get_distance_matrix(self, cognates: list) -> list:
         """
@@ -128,7 +136,15 @@ class LevenshteinDistanceCalculator:
         for i in range(1, len(word1) + 1):
             for j in range(1, len(word2) + 1):
                 # cost is 0 if the letter is the same or 1 if not
-                cost = 0 if word1[i - 1] == word2[j - 1] else 1
+                if word1[i - 1] == word2[j - 1]:
+                    cost = 0
+                else:
+                    if self.use_phonetic:
+                        cost = self.distance.weighted_feature_edit_distance(
+                            word1[i - 1], word2[j - 1]
+                        )
+                    else:
+                        cost = 1
 
                 insertion = dl_matrix[i][j - 1] + 1
                 deletion = dl_matrix[i - 1][j] + 1
@@ -141,7 +157,10 @@ class LevenshteinDistanceCalculator:
                 elif min_distance == deletion:
                     op_matrix[i][j] = "D"
                 else:
-                    op_matrix[i][j] = "S" if cost == 1 else ""  # substitution
+                    if cost == 0:
+                        op_matrix[i][j] = ""  # keep
+                    else:
+                        op_matrix[i][j] = "S"  # substitution
 
                 dl_matrix[i][j] = min_distance
 

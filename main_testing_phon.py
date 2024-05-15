@@ -1,5 +1,4 @@
 from levenshtein_dist_calc import LevenshteinDistanceCalculator
-from levenshtein_phonetic_dist_calc import LevenshteinPhoneticDistanceCalculator
 
 
 word_list = ["haus", "house", "maison", "casa", "hamburger"]
@@ -11,7 +10,7 @@ print("Distance:", distance)
 print("Operations:", operations)
 
 
-phonetic_calculator = LevenshteinPhoneticDistanceCalculator(alphabet)
+phonetic_calculator = LevenshteinDistanceCalculator(alphabet, use_phonetic=True)
 distance, operations = phonetic_calculator.calculate_dl_distance("haus", "house")
 print("Distance:", distance)
 print("Operations:", operations)

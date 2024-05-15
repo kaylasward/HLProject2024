@@ -24,7 +24,7 @@ ie_forms = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_forms.tab")
 df_word_list = TabFileReader.get_word_list(barb_forms)
 alphabet = TabFileReader.get_alphabet(df_word_list)
 
-calcedit = LevenshteinDistanceCalculator(df_word_list, alphabet)
+calcedit = LevenshteinDistanceCalculator(alphabet)
 score_list = calcedit.get_all_dl_distances(barb_forms)
 
 

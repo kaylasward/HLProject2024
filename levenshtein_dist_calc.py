@@ -56,7 +56,7 @@ class LevenshteinDistanceCalculator:
             list: A list containing dictionaries for each row in the DataFrame with the word, cognates, and their scores.
                 Ex: [{'lexeme': 'the land',
                     'cognates': [{'word1': 'su', 'lang1': 'Awa Pit', 'word2': 'to', 'lang2': 'Tsafiki', 'score': 1.0},
-                                {'word1': 'tu', 'lang1': "Cha'palaa", 'word2': 'to', 'lang2': 'Tsafiki','score': 1.0}]}]
+                                {'word1': 'tu', 'lang1': "Cha'palaa", 'word2': 'to', 'lang2': 'Tsafiki', 'score': 1.0}]}]
         """
         all_word_scores = []
         language_names = data_df.iloc[0].values.tolist()
@@ -70,6 +70,7 @@ class LevenshteinDistanceCalculator:
             row_dict["lexeme"] = index_word
             row_dict["cognates"] = []
 
+            # list of tuples (lang index, token)
             tokens = [
                 (data_df.columns[i + 1], token)
                 for i, token in enumerate(row[1:])
@@ -78,7 +79,6 @@ class LevenshteinDistanceCalculator:
 
             for i, (lang1_id, word1) in enumerate(tokens):
                 for j, (lang2_id, word2) in enumerate(tokens[i + 1 :]):
-
                     dl_distance, operations = self.calculate_dl_distance(
                         word1, word2, threshold=threshold
                     )
@@ -97,7 +97,7 @@ class LevenshteinDistanceCalculator:
 
         return all_word_scores
 
-    def calculate_dl_distance(self, input_word1, input_word2, threshold=1):
+    def calculate_dl_distance(self, input_word1, input_word2, threshold=4):
         """
         Calculates the Damerau-Levenshtein distance using the Wagner-Fischer algorithm.
 
@@ -122,41 +122,42 @@ class LevenshteinDistanceCalculator:
             return -1, []
 
         # init dl matrix and operation matrix
-        dl_matrix = [[0] * (len(word2) + 1) for _ in range(len(word1) + 1)]
-        op_matrix = [[""] * (len(word2) + 1) for _ in range(len(word1) + 1)]
+        dl_matrix = [[0] * (len(word2)) for _ in range(len(word1))]
+        op_matrix = [[""] * (len(word2)) for _ in range(len(word1))]
 
         # init first row
-        for i in range(len(word1) + 1):
+        for i in range(len(word1)):
             dl_matrix[i][0] = i
             op_matrix[i][0] = "D"  # deletion
 
         # init first column
-        for j in range(len(word2) + 1):
+        for j in range(len(word2)):
             dl_matrix[0][j] = j
             op_matrix[0][j] = "I"  # insertion
 
-        for i in range(1, len(word1) + 1):
-            for j in range(1, len(word2) + 1):
+        for i in range(1, len(word1)):
+            for j in range(1, len(word2)):
                 # cost is 0 if the letter is the same or 1 if not
-                if word1[i - 1] == word2[j - 1]:
+                if word1[i] == word2[j]:
                     cost = 0
                 else:
                     if self.use_phonetic:
                         cost = self.distance.weighted_feature_edit_distance(
-                            word1[i - 1], word2[j - 1]
+                            word1[i], word2[j]
                         )
                     else:
                         cost = 1
 
-                insertion = dl_matrix[i][j - 1] + 1
-                deletion = dl_matrix[i - 1][j] + 1
-                substitution = dl_matrix[i - 1][j - 1] + cost
+                insertion_cost = dl_matrix[i][j - 1] + 1
+                deletion_cost = dl_matrix[i - 1][j] + 1
+                substitution_cost = dl_matrix[i - 1][j - 1] + cost
 
-                min_distance = min(insertion, deletion, substitution)
+                min_distance = min(insertion_cost, deletion_cost, substitution_cost)
+                dl_matrix[i][j] = min_distance
 
-                if min_distance == insertion:
+                if min_distance == insertion_cost:
                     op_matrix[i][j] = "I"
-                elif min_distance == deletion:
+                elif min_distance == deletion_cost:
                     op_matrix[i][j] = "D"
                 else:
                     if cost == 0:
@@ -164,31 +165,27 @@ class LevenshteinDistanceCalculator:
                     else:
                         op_matrix[i][j] = "S"  # substitution
 
-                dl_matrix[i][j] = min_distance
-
         # backtrack
-        i, j = len(word1), len(word2)
+        i, j = len(word1) - 1, len(word2) - 1
         operations = []
 
         while i > 0 or j > 0:
             if i > 0 and j > 0 and op_matrix[i][j] == "S":
-                operations.append(f"Substitute '{word1[i - 1]}' with '{word2[j - 1]}'")
+                operations.append(f"Substitute '{word1[i]}' with '{word2[j]}'")
                 i -= 1
                 j -= 1
             elif i > 0 and op_matrix[i][j] == "D":
-                operations.append(f"Delete '{word1[i - 1]}'")
+                operations.append(f"Delete '{word1[i]}'")
                 i -= 1
             elif j > 0 and op_matrix[i][j] == "I":
-                operations.append(f"Insert '{word2[j - 1]}'")
+                operations.append(f"Insert '{word2[j]}'")
                 j -= 1
             else:
-                operations.append(f"Keep '{word2[j - 1]}'")
+                operations.append(f"Keep '{word2[j]}'")
                 i -= 1
                 j -= 1
 
         operations.reverse()
-        # remove extra thing
-        operations = operations[1:]
 
         return dl_matrix[-1][-1], operations
 
@@ -205,7 +202,6 @@ class LevenshteinDistanceCalculator:
         word_chars = []
 
         for char in input_word:
-            if char.lower() in self.alphabet:
-                word_chars.append(char)
+            word_chars.append(char)
 
         return word_chars

@@ -1,4 +1,4 @@
-from calculations import CalcEdit
+from levenshtein_dist_calc import LevenshteinDistanceCalculator
 from read_tab_files import TabFileReader
 
 
@@ -24,7 +24,7 @@ ie_forms = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_forms.tab")
 df_word_list = TabFileReader.get_word_list(barb_forms)
 alphabet = TabFileReader.get_alphabet(df_word_list)
 
-calcedit = CalcEdit(df_word_list, alphabet)
+calcedit = LevenshteinDistanceCalculator(df_word_list, alphabet)
 score_list = calcedit.get_all_dl_distances(barb_forms)
 
 

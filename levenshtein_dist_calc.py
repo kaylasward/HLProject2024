@@ -1,10 +1,25 @@
-class CalcEdit:
+class LevenshteinDistanceCalculator:
     def __init__(self, word_list, alpha):
+        """
+        Args:
+            word_list (list): A list of words used for finding cognates.
+            alpha (str): A string representing the alphabet used in the word list.
+        """
         self.lexicon = word_list
-        self.alphabet = list(alpha)
-        #placeholder: substitution table for directed distance between phonenmes
+        self.alphabet = list(alpha)  # convert alpha string to list
+        # placeholder: substitution table for directed distance between phonenmes
 
     def is_cognate_(self, input_word, threshold=1):
+        """
+        Determines possible cognates within the lexicon for a given word based on the Damerau-Levenshtein distance.
+
+        Args:
+            input_word (str): The word to compare against the lexicon.
+            threshold (int): The maximum allowed distance to consider a word a cognate.
+
+        Returns:
+            list: A list of tuples with the distance score, the cognate word, and the operations needed to convert input_word to the cognate.
+        """
         cognates = []
         for word in self.lexicon:
             dl_distance, operations = self.calculate_dl_distance(
@@ -14,7 +29,7 @@ class CalcEdit:
                 cognates.append(("score: " + str(dl_distance), word, operations))
         return cognates
 
-    def get_distance_matrix(self, cognates:list)->list:
+    def get_distance_matrix(self, cognates: list) -> list:
         """
         Generates a 2d distance matrix between all proposed cognates for a given concept regularized by
         the length of the longer string in each comparison. These are stored in cells of an n by n matrix.
@@ -24,20 +39,36 @@ class CalcEdit:
             cognates (list): list of proposed cognates to be compared with eachother.
 
         Returns:
-            list: n x n distance list 
+            list: n x n distance list
         """
-        distance_matrix = [[0 for i in range(len(cognates))] for j in range(len(cognates))]               
-        
-        for i,source in enumerate(cognates):
-            for j,target in enumerate(cognates):
-                if source == "" or target == "":   #if one cognate in pair is missing, null value
+        distance_matrix = [
+            [0 for i in range(len(cognates))] for j in range(len(cognates))
+        ]
+
+        for i, source in enumerate(cognates):
+            for j, target in enumerate(cognates):
+                if (
+                    source == "" or target == ""
+                ):  # if one cognate in pair is missing, null value
                     distance_matrix[i][j] = float("nan")
                 else:
-                    distance_matrix[i][j] = self.calculate_dl_distance(source,target,1000)[0]/max(len(source),len(target))
-        
+                    distance_matrix[i][j] = self.calculate_dl_distance(
+                        source, target, 1000
+                    )[0] / max(len(source), len(target))
+
         return distance_matrix
 
     def get_all_dl_distances(self, data_df, threshold=100):
+        """
+        Computes the Damerau-Levenshtein distance for all pairs in a dataset.
+
+        Args:
+            data_df (DataFrame): A DataFrame where each row contains different language versions of the same word.
+            threshold (int): Distance threshold to filter out unlikely cognates.
+
+        Returns:
+            list: A list containing dictionaries for each row in the DataFrame with the word, cognates, and their scores.
+        """
         all_word_scores = []
         language_names = data_df.iloc[0].values.tolist()
 
@@ -79,10 +110,21 @@ class CalcEdit:
         return all_word_scores
 
     def calculate_dl_distance(self, input_word1, input_word2, threshold=1):
+        """
+        Calculates the Damerau-Levenshtein distance using the Wagner-Fischer algorithm.
+
+        Args:
+            input_word1 (str): First word for comparison.
+            input_word2 (str): Second word for comparison.
+            threshold (int): Maximum size difference between words to consider for distance calculation.
+
+        Returns:
+            tuple: A tuple containing:
+                the minimum edit distance
+                a list of operations used to transform input_word1 to input_word2
+        """
         word1 = [""]
         word2 = [""]
-
-        # print(input_word2)
 
         word1.extend(self.__deconstruct_str(input_word1))
         word2.extend(self.__deconstruct_str(input_word2))
@@ -149,17 +191,17 @@ class CalcEdit:
         # remove extra thing
         operations = operations[1:]
 
-        # for row in dl_matrix:
-        #     print(row)
-        # print("Operations Matrix:")
-        # for row in op_matrix:
-        #     print(row)
-
         return dl_matrix[-1][-1], operations
 
     def __deconstruct_str(self, input_word):
         """
-        Deconstructs the string into an array of chars
+        Deconstructs the string into an array of chars.
+
+        Args:
+            input_word (str): Word to be deconstructed
+
+        Returns:
+            list: The list of characters of the input word
         """
         word_chars = []
 

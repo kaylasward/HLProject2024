@@ -15,7 +15,7 @@ class LevenshteinDistanceCalculator:
 
         self.distance = panphon.distance.Distance()
 
-    def get_distance_matrix(self, cognates: list) -> list:
+    def get_distance_matrix(self, df: list) -> list:
         """
         Generates a 2d distance matrix between all proposed cognates for a given concept regularized by
         the length of the longer string in each comparison. These are stored in cells of an n by n matrix.
@@ -27,22 +27,23 @@ class LevenshteinDistanceCalculator:
         Returns:
             list: n x n distance list
         """
-        distance_matrix = [
-            [0 for i in range(len(cognates))] for j in range(len(cognates))
-        ]
-
-        for i, source in enumerate(cognates):
-            for j, target in enumerate(cognates):
-                if (
-                    source == "" or target == ""
-                ):  # if one cognate in pair is missing, null value
-                    distance_matrix[i][j] = float("nan")
-                else:
-                    distance_matrix[i][j] = self.calculate_dl_distance(
-                        source, target, 1000
-                    )[0] / max(len(source), len(target))
-
-        return distance_matrix
+        distances = []
+        for row in range(len(df)):
+            if row != 0:
+                cognates = df.loc[row][1:] # The cognates of 1 row (1 concept)
+                distance_matrix = [[0 for i in range(len(cognates))] for j in range(len(cognates))]
+                for i, source in enumerate(cognates):
+                    for j, target in enumerate(cognates):
+                        if (
+                            source == "" or target == ""
+                        ):  # if one cognate in pair is missing, null value
+                            distance_matrix[i][j] = float("nan")
+                        else:
+                            distance_matrix[i][j] = self.calculate_dl_distance(
+                                source, target, 1000
+                            )[0] / max(len(source), len(target))
+                distances.append(distance_matrix)
+        return distances
 
     def get_all_dl_distances(self, data_df, threshold=100):
         """

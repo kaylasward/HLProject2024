@@ -21,14 +21,29 @@ ie_forms = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_forms.tab")
 
 #####
 
-df_word_list = TabFileReader.get_word_list(barb_forms)
-alphabet = TabFileReader.get_alphabet(df_word_list)
+ie_word_list = TabFileReader.get_word_list(ie_forms)
+ie_alphabet = TabFileReader.get_alphabet(ie_word_list)
+ie_calcedit = LevenshteinDistanceCalculator(barb_forms, ie_alphabet)
+ie_score_list = ie_calcedit.get_all_dl_distances()
+ie_distance_matrices = ie_calcedit.get_distance_matrices()
 
-calcedit = LevenshteinDistanceCalculator(alphabet)
-score_list = calcedit.get_all_dl_distances(barb_forms)
+eau_word_list = TabFileReader.get_word_list(eau_forms)
+eau_alphabet = TabFileReader.get_alphabet(eau_word_list)
+eau_calcedit = LevenshteinDistanceCalculator(eau_forms, eau_alphabet)
+eau_score_list = eau_calcedit.get_all_dl_distances()
+eau_distance_matrices = eau_calcedit.get_distance_matrices()
 
+barb_word_list = TabFileReader.get_word_list(barb_forms)
+barb_alphabet = TabFileReader.get_alphabet(barb_word_list)
+barb_calcedit = LevenshteinDistanceCalculator(barb_forms, barb_alphabet)
+barb_score_list = barb_calcedit.get_all_dl_distances()
+barb_distance_matrices = barb_calcedit.get_distance_matrices()
+
+print(barb_distance_matrices[0])
+
+#####
 
 from scoring import Scoring
 
-ie_scoring = Scoring(score_list, ie_cognacy)
-ie_scoring.iterate_over_goldtable()
+ie_scoring = Scoring(ie_score_list, ie_cognacy)
+#ie_scoring.iterate_over_goldtable()

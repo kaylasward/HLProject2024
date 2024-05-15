@@ -2,12 +2,14 @@ import panphon.distance
 
 
 class LevenshteinDistanceCalculator:
-    def __init__(self, alpha, use_phonetic=False):
+    def __init__(self, df, alpha, use_phonetic=False):
         """
         Args:
+            df (pandas dataframe): The forms data of a language family containing cognates as strings
             alpha (str): A string representing the alphabet used in the word list.
             use_phonetic (bool): Uses a phonetic distance instead of 1 for the cost during calculation if true
         """
+        self.df = df
         self.alphabet = list(alpha)  # convert alpha string to list
         self.use_phonetic = use_phonetic
 
@@ -15,7 +17,7 @@ class LevenshteinDistanceCalculator:
 
         self.distance = panphon.distance.Distance()
 
-    def get_distance_matrix(self, df):
+    def get_distance_matrices(self):
         """
         Generates a list of 2d distance matrices between all proposed cognates for each concept in a given data frame
         regularized by the length of the longer string in each comparison. These are stored in cells of an n by n matrix.
@@ -28,9 +30,9 @@ class LevenshteinDistanceCalculator:
             list: a list of n x n distance lists for each concept in order
         """
         distances = []
-        for row in range(len(df)):
+        for row in range(len(self.df)):
             if row != 0:
-                cognates = df.loc[row][1:] # The cognates of 1 row (1 concept)
+                cognates = self.df.loc[row][1:] # The cognates of 1 row (1 concept)
                 distance_matrix = [[0 for i in range(len(cognates))] for j in range(len(cognates))]
                 for i, source in enumerate(cognates):
                     for j, target in enumerate(cognates):
@@ -45,7 +47,7 @@ class LevenshteinDistanceCalculator:
                 distances.append(distance_matrix)
         return distances
 
-    def get_all_dl_distances(self, data_df, threshold=100):
+    def get_all_dl_distances(self, threshold=100):
         """
         Computes the Damerau-Levenshtein distance for all pairs in a dataset.
 
@@ -60,12 +62,12 @@ class LevenshteinDistanceCalculator:
                                 {'word1': 'tu', 'lang1': "Cha'palaa", 'word2': 'to', 'lang2': 'Tsafiki', 'score': 1.0}]}]
         """
         all_word_scores = []
-        language_names = data_df.iloc[0].values.tolist()
+        language_names = self.df.iloc[0].values.tolist()
 
-        for index, row in data_df.iterrows():
+        for index, row in self.df.iterrows():
             row_dict = {}
 
-            index_word = data_df.iloc[index, 0]
+            index_word = self.df.iloc[index, 0]
             index_word = index_word.split()
             index_word = " ".join(index_word[1:])
             row_dict["lexeme"] = index_word
@@ -73,7 +75,7 @@ class LevenshteinDistanceCalculator:
 
             # list of tuples (lang index, token)
             tokens = [
-                (data_df.columns[i + 1], token)
+                (self.df.columns[i + 1], token)
                 for i, token in enumerate(row[1:])
                 if token != ""
             ]

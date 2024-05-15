@@ -15,17 +15,17 @@ class LevenshteinDistanceCalculator:
 
         self.distance = panphon.distance.Distance()
 
-    def get_distance_matrix(self, df: list) -> list:
+    def get_distance_matrix(self, df):
         """
-        Generates a 2d distance matrix between all proposed cognates for a given concept regularized by
-        the length of the longer string in each comparison. These are stored in cells of an n by n matrix.
+        Generates a list of 2d distance matrices between all proposed cognates for each concept in a given data frame
+        regularized by the length of the longer string in each comparison. These are stored in cells of an n by n matrix.
         Missing entries in cognate pairs are stored as nan values.
 
         Args:
-            cognates (list): list of proposed cognates to be compared with eachother.
+            df: pandas data frame with form data for some language family
 
         Returns:
-            list: n x n distance list
+            list: a list of n x n distance lists for each concept in order
         """
         distances = []
         for row in range(len(df)):

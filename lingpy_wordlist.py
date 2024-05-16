@@ -1,2 +1,0 @@
-import lingpy_wordlist
-

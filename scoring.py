@@ -24,7 +24,6 @@ class Scoring:
                     # only the form
             concept_name = concept["lexeme"]
             gen_cognates[concept_name] = true_cognates
-        print(gen_cognates)
         return gen_cognates
 
     def transform_goldtable(self):
@@ -33,11 +32,20 @@ class Scoring:
         """
         gold_cognates = dict()
         for row in range(len(self.goldfile)):
-            true_cognates = []
-            for col in range(len(self.goldfile.loc[row]) - 1):
-                if row != 0 and col != 0:
-                    if self.goldfile.loc[row, col] == self.goldfile.loc[row, col + 1]:
-                        true_cognates.append((col, col + 1))
-                    gold_cognates[row] = true_cognates
-        print(gold_cognates)
+            if row != 0:
+                cognates = self.goldfile.loc[row][1:]
+                cognate_set = set(cognates)
+                true_cognates = []
+                for w in cognates:
+                    for i, unique in enumerate(cognate_set):
+                        if w == "":
+                            true_cognates.append(0) # to mark missing words
+                        elif w == unique:
+                            true_cognates.append(i) # the index of the cognate class
+                gold_cognates[self.goldfile.loc[row, 0]] = true_cognates
         return gold_cognates
+
+if __name__ == '__main__':
+    from main import ie_cognacy
+    scoring = Scoring(ie_cognacy, ie_cognacy)
+    print(scoring.transform_goldtable())

@@ -96,6 +96,94 @@ class AlignCalculator:
 
         return nw_matrix[n - 1][m - 1], "".join(aligned1), "".join(aligned2)
 
+    def local_alignment(
+        self,
+        input_word1,
+        input_word2,
+        match_penalty=1,
+        mismatch_penalty=-1,
+        gap_penalty=-2,
+    ):
+        """
+        Determines the local alignment and score using the Smith-Waterman algorithm.
+
+        Args:
+            input_word1 (str): First word for comparison.
+            input_word2 (str): Second word for comparison.
+            match_penalty (int): Penalty for when characters match.
+            mismatch_penalty (int): Penalty for when characters don't match.
+            gap_penalty (int): Penalty for an insertion or deletion.
+
+        Returns:
+            (int) score
+            (str) extracted matching segment
+            (str) word1's alignment
+            (str) word2's alignment
+        """
+        word1 = [""]
+        word2 = [""]
+
+        word1.extend(self.__deconstruct_str(input_word1))
+        word2.extend(self.__deconstruct_str(input_word2))
+
+        n, m = len(word1), len(word2)
+        sw_matrix = [[0] * m for _ in range(n)]
+
+        max_score = 0
+        max_position = (0, 0)
+
+        for i in range(1, n):
+            for j in range(1, m):
+                if word1[i] == word2[j]:
+                    diag = sw_matrix[i - 1][j - 1] + match_penalty  # chars match
+                else:
+                    diag = sw_matrix[i - 1][j - 1] + mismatch_penalty  # char mismatch
+
+                top = sw_matrix[i - 1][j] + gap_penalty  # delete from word1
+                left = sw_matrix[i][j - 1] + gap_penalty  # insert from word2
+
+                sw_matrix[i][j] = max(
+                    0, diag, top, left
+                )  # include 0 to indicate ending of alignment
+
+                # track max score and position
+                if sw_matrix[i][j] > max_score:
+                    max_score = sw_matrix[i][j]
+                    max_position = (i, j)
+
+        # traceback from max score position
+        matching_segment = []
+        alignment = ["-"] * len(input_word1)
+        i, j = max_position
+        while i > 0 and j > 0 and sw_matrix[i][j] > 0:
+            if i > 0 and j > 0:
+                diag = sw_matrix[i - 1][j - 1]
+            if i > 0:
+                top = sw_matrix[i - 1][j]
+            if j > 0:
+                left = sw_matrix[i][j - 1]
+
+            if word1[i] == word2[j]:
+                matching_segment.append(word1[i])
+                alignment[i - 1] = word2[j]
+                i -= 1
+                j -= 1
+            elif i > 0 and sw_matrix[i][j] == top:
+                i -= 1
+            elif j > 0 and sw_matrix[i][j] == left:
+                j -= 1
+            else:
+                break
+
+        matching_segment.reverse()
+
+        return (
+            max_score,
+            "".join(matching_segment),
+            input_word1,
+            "".join(alignment),
+        )
+
     def __deconstruct_str(self, input_word):
         """
         Deconstructs the string into an array of chars.

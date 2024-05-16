@@ -27,9 +27,7 @@ class Scoring:
         return gen_cognates
 
     def transform_goldtable(self):
-        """Transforms the gold df into a dict {concept: lst of pairs that are cognates}.
-        A problem we still need to solve is transitivity - if a,b and b,c are cognates, a,c are too
-        """
+        """Transforms the gold df into a dict {concept: lst cognate classes}."""
         gold_cognates = dict()
         for row in range(len(self.goldfile)):
             if row != 0:

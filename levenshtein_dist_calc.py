@@ -168,15 +168,16 @@ class LevenshteinDistanceCalculator:
                 min_distance = min(insertion_cost, deletion_cost, substitution_cost)
                 dl_matrix[i][j] = min_distance
 
-                if min_distance == insertion_cost:
-                    op_matrix[i][j] = "I"
-                elif min_distance == deletion_cost:
-                    op_matrix[i][j] = "D"
-                else:
-                    if cost == 0:
-                        op_matrix[i][j] = ""  # keep
+                if track_operations:
+                    if min_distance == insertion_cost:
+                        op_matrix[i][j] = "I"
+                    elif min_distance == deletion_cost:
+                        op_matrix[i][j] = "D"
                     else:
-                        op_matrix[i][j] = "S"  # substitution
+                        if cost == 0:
+                            op_matrix[i][j] = ""  # keep
+                        else:
+                            op_matrix[i][j] = "S"  # substitution
 
         score = dl_matrix[-1][-1]
 

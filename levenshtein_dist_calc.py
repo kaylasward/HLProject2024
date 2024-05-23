@@ -2,15 +2,15 @@ import panphon.distance
 
 
 class LevenshteinDistanceCalculator:
-    def __init__(self, df, alpha, use_phonetic=False):
+    def __init__(self, use_phonetic=False):  # df, alpha, use_phonetic=False):
         """
         Args:
             df (pandas dataframe): The forms data of a language family containing cognates as strings
             alpha (str): A string representing the alphabet used in the word list.
             use_phonetic (bool): Uses a phonetic distance instead of 1 for the cost during calculation if true
         """
-        self.df = df
-        self.alphabet = list(alpha)  # convert alpha string to list
+        # self.df = df
+        # self.alphabet = list(alpha)  # convert alpha string to list
         self.use_phonetic = use_phonetic
 
         # placeholder: substitution table for directed distance between phonenmes
@@ -32,8 +32,10 @@ class LevenshteinDistanceCalculator:
         distances = []
         for row in range(len(self.df)):
             if row != 0:
-                cognates = self.df.loc[row][1:] # The cognates of 1 row (1 concept)
-                distance_matrix = [[0 for i in range(len(cognates))] for j in range(len(cognates))]
+                cognates = self.df.loc[row][1:]  # The cognates of 1 row (1 concept)
+                distance_matrix = [
+                    [0 for i in range(len(cognates))] for j in range(len(cognates))
+                ]
                 for i, source in enumerate(cognates):
                     for j, target in enumerate(cognates):
                         if (
@@ -190,7 +192,9 @@ class LevenshteinDistanceCalculator:
 
         operations.reverse()
 
-        return dl_matrix[-1][-1], operations
+        score = dl_matrix[-1][-1]
+
+        return score, operations
 
     def __deconstruct_str(self, input_word):
         """

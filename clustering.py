@@ -14,8 +14,21 @@ def get_distancematrix(cognate_list):
             if (source == ""
                 or target == ""):  # if one cognate in pair is missing, null value
                 distance_matrix[i][j] = float("nan")
-            else:
+            elif distance_metric == "levenshtein_nltk":
+                #flag for 
                 distance_matrix[i][j] = nltk.edit_distance(source, target)/max(len(source),len(target))
+            elif distance_metric == "levenshtein_custom":
+                ldc = LevenshteinDistanceCalculator()
+                distance_matrix[i][j], _ = ldc.calculate_dl_distance(source, target)
+            elif distance_metric == "levenshtein_custom_phonetic":
+                ldc = LevenshteinDistanceCalculator(use_phonetic=True)
+                distance_matrix[i][j], _ = ldc.calculate_dl_distance(source, target)
+            elif distance_metric == "global_alignment":
+                ac = AlignCalculator()
+                distance_matrix[i][j], _, _ = ac.global_alignment(source, target)
+            elif distance_metric == "local_alignment":
+                ac = AlignCalculator()
+                distance_matrix[i][j], _, _, _ = ac.local_alignment(source, target)
 
     return distance_matrix
 

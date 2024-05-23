@@ -38,9 +38,9 @@ def remove_gaps(cognates, gold_cognates, taxa):
     """ Removes the cognate from both lists where either
      list has a gap. Should work for all families """
     # Save the indices where at least one of the files have a gap
-    assert len(cognates) == len(gold_cognates)
+    assert len(cognates) == len(gold_cognates) == len(taxa)
     empty_indices = []
-    print("Lists before gaps are removed:",cognates, gold_cognates, taxa)
+    new_cognates, new_gold, new_taxa = cognates.copy(), gold_cognates.copy(), taxa.copy()
     for i in range(len(cognates)):
         if cognates[i] == "":
             empty_indices.append(i)
@@ -48,12 +48,11 @@ def remove_gaps(cognates, gold_cognates, taxa):
             empty_indices.append(i)
     # Pop the items last to first
     for n in reversed(empty_indices):
-        cognates.pop(n)
-        gold_cognates.pop(n)
-        taxa.pop(n)
-    print("Lists after gaps are removed:",cognates, gold_cognates, taxa)
-    assert len(cognates) == len(gold_cognates) == len(taxa)
-    return cognates, gold_cognates, taxa
+        new_cognates.pop(n)
+        new_gold.pop(n)
+        new_taxa.pop(n)
+    assert len(new_cognates) == len(new_gold) == len(new_taxa)
+    return new_cognates, new_gold, new_taxa
 
 def prepare_comparison(threshold:float, gold_row:list, cognates:list, taxa:list)->tuple:
     distance_matrix = get_distancematrix(cognates)
@@ -62,23 +61,33 @@ def prepare_comparison(threshold:float, gold_row:list, cognates:list, taxa:list)
     gold_taxadict = gold_clust2taxa_dict(taxa, gold_row)
     return taxa_dict, gold_taxadict
 
-def main(language_fam, fam_gold, threshold=4):
+def score(clusters, gold_clusters):
     precision = 0
     recall = 0
     fscore = 0
-    full_taxa = list(language_fam.iloc[0][1:])
-    for i in range(1, len(language_fam)):
-        cognates = list(language_fam.iloc[i][1:])
-        gold_cognates = list(fam_gold.iloc[i][1:])
-        cognates, gold_cognates, cut_taxa = remove_gaps(cognates, gold_cognates, full_taxa) # Remove gaps
-        taxa_dict, gold_taxadict = prepare_comparison(threshold, gold_cognates, cognates, cut_taxa)
-        precision += bcubed.precision(taxa_dict, gold_taxadict) # Here
-        recall += bcubed.recall(taxa_dict, gold_taxadict)
-    n_rows = len(language_fam)-1
+    for i in range(len(clusters)):
+        precision += bcubed.precision(clusters[i], gold_clusters[i])
+        recall += bcubed.recall(clusters[i], gold_clusters[i])
+    n_rows = len(clusters)
     precision /= n_rows
     recall /= n_rows
     fscore = bcubed.fscore(precision, recall)
     return round(precision,2), round(recall,2), round(fscore,2)
+
+def main(language_fam, fam_gold, threshold=4):
+    full_taxa = list(language_fam.iloc[0][1:])
+    clusters = []
+    gold_clusters = []
+    for i in range(1, len(language_fam)):
+        cognates = list(language_fam.iloc[i][1:])
+        gold_cognates = list(fam_gold.iloc[i][1:])
+        cognates, gold_cognates, cut_taxa = remove_gaps(cognates, gold_cognates, full_taxa) # Remove gaps
+        if cognates: # If the list is not empty after gaps are removed
+            taxa_dict, gold_taxadict = prepare_comparison(threshold, gold_cognates, cognates, cut_taxa)
+            clusters.append(taxa_dict)
+            gold_clusters.append(gold_taxadict)
+    assert len(clusters) == len(gold_clusters)
+    return clusters, gold_clusters
 
 #####
 
@@ -95,20 +104,23 @@ eau_forms = TabFileReader.tab_reader(
 ie_cognacy = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_cognacy.tab")
 ie_forms = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_forms.tab")
 
-barb_scores_4 = main(barb_forms, barb_cognacy)
-barb_scores_2 = main(barb_forms, barb_cognacy, threshold=2)
-eau_scores_4 = main(eau_forms, eau_cognacy)
-eau_scores_2 = main(eau_forms, eau_cognacy, threshold=2)
-ie_scores_4 = main(ie_forms, ie_cognacy)
-ie_scores_2 = main(ie_forms, ie_cognacy, threshold=2)
+barb_clusters_4 = main(barb_forms, barb_cognacy)
+barb_clusters_2 = main(barb_forms, barb_cognacy, threshold=2)
+eau_clusters_4 = main(eau_forms, eau_cognacy)
+eau_clusters_2 = main(eau_forms, eau_cognacy, threshold=2)
+ie_clusters_4 = main(ie_forms, ie_cognacy)
+ie_clusters_2 = main(ie_forms, ie_cognacy, threshold=2)
+
+print("Clustering of 'dog':", ie_clusters_2[0][31])
+print("Knows cognate groups:", ie_clusters_2[1][31])
 
 print("Family       Threshold Precision Recall F-score")
-print("Barbacoan            2  ", barb_scores_2)
-print("Barbacoan            4  ", barb_scores_4)
-print("Eastern Austronesian 2  ", eau_scores_2)
-print("Eastern Austronesian 4  ", eau_scores_4)
-print("Indo-European        2  ", ie_scores_2)
-print("Indo-European        4  ", ie_scores_4)
+print("Barbacoan            2  ", score(barb_clusters_2[0], barb_clusters_2[1]))
+print("Barbacoan            4  ", score(barb_clusters_4[0], barb_clusters_4[1]))
+print("Eastern Austronesian 2  ", score(eau_clusters_2[0], eau_clusters_2[1]))
+print("Eastern Austronesian 4  ", score(eau_clusters_4[0], eau_clusters_4[1]))
+print("Indo-European        2  ", score(ie_clusters_2[0], ie_clusters_2[0]))
+print("Indo-European        4  ", score(ie_clusters_4[0], ie_clusters_4[1]))
 
 # Trying Eastern Austronesian data gives weird error - why?
 # Scores are the same with different thresholds + why?

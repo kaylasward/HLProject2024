@@ -1,22 +1,28 @@
 import lingpy
 from levenshtein_dist_calc import LevenshteinDistanceCalculator
+from alignment_calculator import AlignCalculator
 import nltk
 from read_tab_files import TabFileReader
 import bcubed
 from collections import defaultdict
 
-#calculate distance matrix from cognate list (integrate with levenshtein distance calc maybe)
-def get_distancematrix(cognate_list):
-    distance_matrix = [[0 for i in range(len(cognate_list))]
-                           for j in range(len(cognate_list))]
+
+# calculate distance matrix from cognate list (integrate with levenshtein distance calc maybe)
+def get_distancematrix(cognate_list, distance_metric="levenshtein_nltk"):
+    distance_matrix = [
+        [0 for i in range(len(cognate_list))] for j in range(len(cognate_list))
+    ]
     for i, source in enumerate(cognate_list):
         for j, target in enumerate(cognate_list):
-            if (source == ""
-                or target == ""):  # if one cognate in pair is missing, null value
+            if (
+                source == "" or target == ""
+            ):  # if one cognate in pair is missing, null value
                 distance_matrix[i][j] = float("nan")
             elif distance_metric == "levenshtein_nltk":
-                #flag for 
-                distance_matrix[i][j] = nltk.edit_distance(source, target)/max(len(source),len(target))
+                # flag for
+                distance_matrix[i][j] = nltk.edit_distance(source, target) / max(
+                    len(source), len(target)
+                )
             elif distance_metric == "levenshtein_custom":
                 ldc = LevenshteinDistanceCalculator()
                 distance_matrix[i][j], _ = ldc.calculate_dl_distance(source, target)
@@ -32,14 +38,16 @@ def get_distancematrix(cognate_list):
 
     return distance_matrix
 
-#gold file clustering to taxa:cluster dictionary transformer for bcubed comparisons
+
+# gold file clustering to taxa:cluster dictionary transformer for bcubed comparisons
 def gold_clust2taxa_dict(taxa, clusters):
     cluster_dict = {}
     for lang, cluster in zip(taxa, clusters):
         cluster_dict[lang] = set([cluster])
     return cluster_dict
 
-#lingpy.upgma_flat output to taxa:cluster dictionary transformer for bcubed comparisons
+
+# lingpy.upgma_flat output to taxa:cluster dictionary transformer for bcubed comparisons
 def upgma2taxa_dict(calculated_dict):
     output_clusters = {}
     for clus, langs in calculated_dict.items():
@@ -47,13 +55,18 @@ def upgma2taxa_dict(calculated_dict):
             output_clusters[lang] = set(str(clus))
     return output_clusters
 
+
 def remove_gaps(cognates, gold_cognates, taxa):
-    """ Removes the cognate from both lists where either
-     list has a gap. Should work for all families """
+    """Removes the cognate from both lists where either
+    list has a gap. Should work for all families"""
     # Save the indices where at least one of the files have a gap
     assert len(cognates) == len(gold_cognates) == len(taxa)
     empty_indices = []
-    new_cognates, new_gold, new_taxa = cognates.copy(), gold_cognates.copy(), taxa.copy()
+    new_cognates, new_gold, new_taxa = (
+        cognates.copy(),
+        gold_cognates.copy(),
+        taxa.copy(),
+    )
     for i in range(len(cognates)):
         if cognates[i] == "":
             empty_indices.append(i)
@@ -67,12 +80,16 @@ def remove_gaps(cognates, gold_cognates, taxa):
     assert len(new_cognates) == len(new_gold) == len(new_taxa)
     return new_cognates, new_gold, new_taxa
 
-def prepare_comparison(threshold:float, gold_row:list, cognates:list, taxa:list)->tuple:
+
+def prepare_comparison(
+    threshold: float, gold_row: list, cognates: list, taxa: list
+) -> tuple:
     distance_matrix = get_distancematrix(cognates)
-    cluster_dict = lingpy.flat_upgma(threshold,distance_matrix,taxa)
+    cluster_dict = lingpy.flat_upgma(threshold, distance_matrix, taxa)
     taxa_dict = upgma2taxa_dict(cluster_dict)
     gold_taxadict = gold_clust2taxa_dict(taxa, gold_row)
     return taxa_dict, gold_taxadict
+
 
 def score(clusters, gold_clusters):
     precision = 0
@@ -85,7 +102,8 @@ def score(clusters, gold_clusters):
     precision /= n_rows
     recall /= n_rows
     fscore = bcubed.fscore(precision, recall)
-    return round(precision,2), round(recall,2), round(fscore,2)
+    return round(precision, 2), round(recall, 2), round(fscore, 2)
+
 
 def main(language_fam, fam_gold, threshold=4):
     full_taxa = list(language_fam.iloc[0][1:])
@@ -94,25 +112,34 @@ def main(language_fam, fam_gold, threshold=4):
     for i in range(1, len(language_fam)):
         cognates = list(language_fam.iloc[i][1:])
         gold_cognates = list(fam_gold.iloc[i][1:])
-        cognates, gold_cognates, cut_taxa = remove_gaps(cognates, gold_cognates, full_taxa) # Remove gaps
-        if cognates: # If the list is not empty after gaps are removed
-            taxa_dict, gold_taxadict = prepare_comparison(threshold, gold_cognates, cognates, cut_taxa)
+        cognates, gold_cognates, cut_taxa = remove_gaps(
+            cognates, gold_cognates, full_taxa
+        )  # Remove gaps
+        if cognates:  # If the list is not empty after gaps are removed
+            taxa_dict, gold_taxadict = prepare_comparison(
+                threshold, gold_cognates, cognates, cut_taxa
+            )
             clusters.append(taxa_dict)
             gold_clusters.append(gold_taxadict)
     assert len(clusters) == len(gold_clusters)
     return clusters, gold_clusters
 
+
 #####
 
 barb_cognacy = TabFileReader.tab_reader(
-    "chl2024_barbacoandata/chl2023_barbacoan_cognacy.tab")
+    "chl2024_barbacoandata/chl2023_barbacoan_cognacy.tab"
+)
 barb_forms = TabFileReader.tab_reader(
-    "chl2024_barbacoandata/chl2023_barbacoan_forms.tab")
+    "chl2024_barbacoandata/chl2023_barbacoan_forms.tab"
+)
 
 eau_cognacy = TabFileReader.tab_reader(
-    "chl2024_eastern-austronesiandata/chl2023_eastern-austronesian_cognacy.tab")
+    "chl2024_eastern-austronesiandata/chl2023_eastern-austronesian_cognacy.tab"
+)
 eau_forms = TabFileReader.tab_reader(
-    "chl2024_eastern-austronesiandata/chl2023_eastern-austronesian_forms.tab")
+    "chl2024_eastern-austronesiandata/chl2023_eastern-austronesian_forms.tab"
+)
 
 ie_cognacy = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_cognacy.tab")
 ie_forms = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_forms.tab")
@@ -137,4 +164,3 @@ print("Indo-European        4  ", score(ie_clusters_4[0], ie_clusters_4[1]))
 
 # Trying Eastern Austronesian data gives weird error - why?
 # Scores are the same with different thresholds + why?
-

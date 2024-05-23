@@ -27,6 +27,14 @@ class Clustering:
         distance_matrix = [
             [0 for i in range(len(cognate_list))] for j in range(len(cognate_list))
         ]
+
+        if self.distance_metric == "levenshtein_custom":
+            ldc = LevenshteinDistanceCalculator()
+        elif self.distance_metric == "levenshtein_custom_phonetic":
+            ldc = LevenshteinDistanceCalculator(use_phonetic=True)
+        elif self.distance_metric in ["global_alignment", "local_alignment"]:
+            ac = AlignCalculator()
+
         for i, source in enumerate(cognate_list):
             for j in range(i, len(cognate_list)):
                 target = cognate_list[j]
@@ -40,22 +48,18 @@ class Clustering:
                     )
                     distance_matrix[i][j] = distance_matrix[j][i] = score
                 elif self.distance_metric == "levenshtein_custom":
-                    ldc = LevenshteinDistanceCalculator()
                     ld_score = ldc.calculate_dl_distance(source, target)
                     score = ld_score / max(len(source), len(target))
                     distance_matrix[i][j] = distance_matrix[j][i] = score
                 elif self.distance_metric == "levenshtein_custom_phonetic":
-                    ldc = LevenshteinDistanceCalculator(use_phonetic=True)
                     ld_score = ldc.calculate_dl_distance(source, target)
                     score = ld_score / max(len(source), len(target))
                     distance_matrix[i][j] = distance_matrix[j][i] = score
                 elif self.distance_metric == "global_alignment":
-                    ac = AlignCalculator()
                     score, _, _ = ac.global_alignment(source, target)
                     score = score / max(len(source), len(target))
                     distance_matrix[i][j] = distance_matrix[j][i] = score
                 elif self.distance_metric == "local_alignment":
-                    ac = AlignCalculator()
                     score, _, _, _ = ac.local_alignment(source, target)
                     score = score / max(len(source), len(target))
                     distance_matrix[i][j] = distance_matrix[j][i] = score

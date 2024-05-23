@@ -24,9 +24,8 @@ class Clustering:
         self.clusters, self.gold_clusters = self.clustering()
 
     def get_distancematrix(self, cognate_list):
-        distance_matrix = [
-            [0 for i in range(len(cognate_list))] for j in range(len(cognate_list))
-        ]
+        n = len(cognate_list)
+        distance_matrix = [[0] * n for _ in range(n)]
 
         if self.distance_metric == "levenshtein_custom":
             ldc = LevenshteinDistanceCalculator()
@@ -35,34 +34,30 @@ class Clustering:
         elif self.distance_metric in ["global_alignment", "local_alignment"]:
             ac = AlignCalculator()
 
-        for i, source in enumerate(cognate_list):
-            for j in range(i, len(cognate_list)):
+        for i in range(n):
+            for j in range(i, n):
+                source = cognate_list[i]
                 target = cognate_list[j]
+
                 if (
                     source == "" or target == ""
                 ):  # if one cognate in pair is missing, null value
                     distance_matrix[i][j] = distance_matrix[j][i] = float("nan")
-                elif self.distance_metric == "levenshtein_nltk":
-                    score = nltk.edit_distance(source, target) / max(
+                else:
+                    if self.distance_metric == "levenshtein_nltk":
+                        dist_score = nltk.edit_distance(source, target)
+                    elif self.distance_metric == "levenshtein_custom":
+                        dist_score = ldc.calculate_dl_distance(source, target)
+                    elif self.distance_metric == "levenshtein_custom_phonetic":
+                        dist_score = ldc.calculate_dl_distance(source, target)
+                    elif self.distance_metric == "global_alignment":
+                        dist_score, _, _ = ac.global_alignment(source, target)
+                    elif self.distance_metric == "local_alignment":
+                        dist_score, _, _, _ = ac.local_alignment(source, target)
+
+                    distance_matrix[i][j] = distance_matrix[j][i] = dist_score / max(
                         len(source), len(target)
                     )
-                    distance_matrix[i][j] = distance_matrix[j][i] = score
-                elif self.distance_metric == "levenshtein_custom":
-                    ld_score = ldc.calculate_dl_distance(source, target)
-                    score = ld_score / max(len(source), len(target))
-                    distance_matrix[i][j] = distance_matrix[j][i] = score
-                elif self.distance_metric == "levenshtein_custom_phonetic":
-                    ld_score = ldc.calculate_dl_distance(source, target)
-                    score = ld_score / max(len(source), len(target))
-                    distance_matrix[i][j] = distance_matrix[j][i] = score
-                elif self.distance_metric == "global_alignment":
-                    score, _, _ = ac.global_alignment(source, target)
-                    score = score / max(len(source), len(target))
-                    distance_matrix[i][j] = distance_matrix[j][i] = score
-                elif self.distance_metric == "local_alignment":
-                    score, _, _, _ = ac.local_alignment(source, target)
-                    score = score / max(len(source), len(target))
-                    distance_matrix[i][j] = distance_matrix[j][i] = score
         return distance_matrix
 
     # gold file clustering to taxa:cluster dictionary transformer for bcubed comparisons

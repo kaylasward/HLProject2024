@@ -8,8 +8,14 @@ from collections import defaultdict
 
 
 # calculate distance matrix from cognate list (integrate with levenshtein distance calc maybe)
-class Clustering():
-    def __init__(self, cognacy_file, goldfile, threshold:float, distance_metric="levenshtein_nltk"):
+class Clustering:
+    def __init__(
+        self,
+        cognacy_file,
+        goldfile,
+        threshold: float,
+        distance_metric="levenshtein_nltk",
+    ):
         self.cognacy_file = cognacy_file
         self.goldfile = goldfile
         self.threshold = threshold
@@ -18,35 +24,42 @@ class Clustering():
         self.clusters, self.gold_clusters = self.clustering()
 
     def get_distancematrix(self, cognate_list):
-        """NOT DONE"""
         distance_matrix = [
             [0 for i in range(len(cognate_list))] for j in range(len(cognate_list))
         ]
         for i, source in enumerate(cognate_list):
-            for j, target in enumerate(cognate_list):
+            for j in range(i, len(cognate_list)):
+                target = cognate_list[j]
                 if (
                     source == "" or target == ""
                 ):  # if one cognate in pair is missing, null value
-                    distance_matrix[i][j] = float("nan")
+                    distance_matrix[i][j] = distance_matrix[j][i] = float("nan")
                 elif self.distance_metric == "levenshtein_nltk":
-                    # flag for
-                    distance_matrix[i][j] = nltk.edit_distance(source, target) / max(
+                    score = nltk.edit_distance(source, target) / max(
                         len(source), len(target)
                     )
+                    distance_matrix[i][j] = distance_matrix[j][i] = score
                 elif self.distance_metric == "levenshtein_custom":
                     ldc = LevenshteinDistanceCalculator()
-                    distance_matrix[i][j], _ = ldc.calculate_dl_distance(source, target)
+                    ld_score = ldc.calculate_dl_distance(source, target)
+                    score = ld_score / max(len(source), len(target))
+                    distance_matrix[i][j] = distance_matrix[j][i] = score
                 elif self.distance_metric == "levenshtein_custom_phonetic":
                     ldc = LevenshteinDistanceCalculator(use_phonetic=True)
-                    distance_matrix[i][j], _ = ldc.calculate_dl_distance(source, target)
+                    ld_score = ldc.calculate_dl_distance(source, target)
+                    score = ld_score / max(len(source), len(target))
+                    distance_matrix[i][j] = distance_matrix[j][i] = score
                 elif self.distance_metric == "global_alignment":
                     ac = AlignCalculator()
-                    distance_matrix[i][j], _, _ = ac.global_alignment(source, target)
+                    score, _, _ = ac.global_alignment(source, target)
+                    score = score / max(len(source), len(target))
+                    distance_matrix[i][j] = distance_matrix[j][i] = score
                 elif self.distance_metric == "local_alignment":
                     ac = AlignCalculator()
-                    distance_matrix[i][j], _, _, _ = ac.local_alignment(source, target)
+                    score, _, _, _ = ac.local_alignment(source, target)
+                    score = score / max(len(source), len(target))
+                    distance_matrix[i][j] = distance_matrix[j][i] = score
         return distance_matrix
-
 
     # gold file clustering to taxa:cluster dictionary transformer for bcubed comparisons
     def gold_clust2taxa_dict(self, taxa, clusters):
@@ -87,16 +100,12 @@ class Clustering():
         assert len(new_cognates) == len(new_gold) == len(new_taxa)
         return new_cognates, new_gold, new_taxa
 
-
-    def prepare_comparison(
-        self, gold_row: list, cognates: list, taxa: list
-    ) -> tuple:
+    def prepare_comparison(self, gold_row: list, cognates: list, taxa: list) -> tuple:
         distance_matrix = self.get_distancematrix(cognates)
         cluster_dict = lingpy.flat_upgma(self.threshold, distance_matrix, taxa)
         taxa_dict = self.upgma2taxa_dict(cluster_dict)
         gold_taxadict = self.gold_clust2taxa_dict(taxa, gold_row)
         return taxa_dict, gold_taxadict
-
 
     def score(self):
         precision = 0
@@ -111,7 +120,6 @@ class Clustering():
         fscore = bcubed.fscore(precision, recall)
         return round(precision, 4), round(recall, 4), round(fscore, 4)
 
-
     def clustering(self):
         """Prepares the cluster dictionaries for comparison"""
         full_taxa = list(self.cognacy_file.iloc[0][1:])
@@ -124,14 +132,16 @@ class Clustering():
                 cognates, gold_cognates, full_taxa
             )  # Remove gaps
             if cognates:  # If the list is not empty after gaps are removed
-                taxa_dict, gold_taxadict = self.prepare_comparison(gold_cognates, cognates, cut_taxa)
+                taxa_dict, gold_taxadict = self.prepare_comparison(
+                    gold_cognates, cognates, cut_taxa
+                )
                 clusters.append(taxa_dict)
                 gold_clusters.append(gold_taxadict)
         assert len(clusters) == len(gold_clusters)
         return clusters, gold_clusters
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     barb_cognacy = TabFileReader.tab_reader(
         "chl2024_barbacoandata/chl2023_barbacoan_cognacy.tab"
@@ -150,17 +160,23 @@ if __name__ == '__main__':
     ie_cognacy = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_cognacy.tab")
     ie_forms = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_forms.tab")
 
-    barb_clusters_4 = Clustering(barb_forms, barb_cognacy, threshold=.4)
-    barb_clusters_2 = Clustering(barb_forms, barb_cognacy, threshold=.2)
-    eau_clusters_4 = Clustering(eau_forms, eau_cognacy, threshold=.4)
-    eau_clusters_2 = Clustering(eau_forms, eau_cognacy, threshold=.2)
-    ie_clusters_4 = Clustering(ie_forms, ie_cognacy, threshold=.4)
-    ie_clusters_2 = Clustering(ie_forms, ie_cognacy, threshold=.2)
+    barb_clusters_4 = Clustering(barb_forms, barb_cognacy, threshold=0.4)
+    barb_clusters_2 = Clustering(barb_forms, barb_cognacy, threshold=0.2)
+    eau_clusters_4 = Clustering(eau_forms, eau_cognacy, threshold=0.4)
+    eau_clusters_2 = Clustering(eau_forms, eau_cognacy, threshold=0.2)
+    ie_clusters_4 = Clustering(ie_forms, ie_cognacy, threshold=0.4)
+    ie_clusters_2 = Clustering(ie_forms, ie_cognacy, threshold=0.2)
 
     print("Clustering of 'dog':", ie_clusters_2.clusters[31])
     print("Knows cognate groups:", ie_clusters_2.gold_clusters[31])
-    print("Prec:", bcubed.precision(ie_clusters_2.clusters[31], ie_clusters_2.gold_clusters[31]))
-    print("Rec:", bcubed.recall(ie_clusters_2.clusters[31], ie_clusters_2.gold_clusters[31]))
+    print(
+        "Prec:",
+        bcubed.precision(ie_clusters_2.clusters[31], ie_clusters_2.gold_clusters[31]),
+    )
+    print(
+        "Rec:",
+        bcubed.recall(ie_clusters_2.clusters[31], ie_clusters_2.gold_clusters[31]),
+    )
 
     print("Family           Threshold Precision Recall F-score")
     print("Barbacoan            .2  ", barb_clusters_2.score())

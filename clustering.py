@@ -131,44 +131,44 @@ class Clustering():
         return clusters, gold_clusters
 
 
-#####
+if __name__ == '__main__':
 
-barb_cognacy = TabFileReader.tab_reader(
-    "chl2024_barbacoandata/chl2023_barbacoan_cognacy.tab"
-)
-barb_forms = TabFileReader.tab_reader(
-    "chl2024_barbacoandata/chl2023_barbacoan_forms.tab"
-)
+    barb_cognacy = TabFileReader.tab_reader(
+        "chl2024_barbacoandata/chl2023_barbacoan_cognacy.tab"
+    )
+    barb_forms = TabFileReader.tab_reader(
+        "chl2024_barbacoandata/chl2023_barbacoan_forms.tab"
+    )
 
-eau_cognacy = TabFileReader.tab_reader(
-    "chl2024_eastern-austronesiandata/chl2023_eastern-austronesian_cognacy.tab"
-)
-eau_forms = TabFileReader.tab_reader(
-    "chl2024_eastern-austronesiandata/chl2023_eastern-austronesian_forms.tab"
-)
+    eau_cognacy = TabFileReader.tab_reader(
+        "chl2024_eastern-austronesiandata/chl2023_eastern-austronesian_cognacy.tab"
+    )
+    eau_forms = TabFileReader.tab_reader(
+        "chl2024_eastern-austronesiandata/chl2023_eastern-austronesian_forms.tab"
+    )
 
-ie_cognacy = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_cognacy.tab")
-ie_forms = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_forms.tab")
+    ie_cognacy = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_cognacy.tab")
+    ie_forms = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_forms.tab")
 
-barb_clusters_4 = Clustering(barb_forms, barb_cognacy, threshold=.4)
-barb_clusters_2 = Clustering(barb_forms, barb_cognacy, threshold=.2)
-eau_clusters_4 = Clustering(eau_forms, eau_cognacy, threshold=.4)
-eau_clusters_2 = Clustering(eau_forms, eau_cognacy, threshold=.2)
-ie_clusters_4 = Clustering(ie_forms, ie_cognacy, threshold=.4)
-ie_clusters_2 = Clustering(ie_forms, ie_cognacy, threshold=.2)
+    barb_clusters_4 = Clustering(barb_forms, barb_cognacy, threshold=.4)
+    barb_clusters_2 = Clustering(barb_forms, barb_cognacy, threshold=.2)
+    eau_clusters_4 = Clustering(eau_forms, eau_cognacy, threshold=.4)
+    eau_clusters_2 = Clustering(eau_forms, eau_cognacy, threshold=.2)
+    ie_clusters_4 = Clustering(ie_forms, ie_cognacy, threshold=.4)
+    ie_clusters_2 = Clustering(ie_forms, ie_cognacy, threshold=.2)
 
-print("Clustering of 'dog':", ie_clusters_2.clusters[31])
-print("Knows cognate groups:", ie_clusters_2.gold_clusters[31])
-print("Prec:", bcubed.precision(ie_clusters_2.clusters[31], ie_clusters_2.gold_clusters[31]))
-print("Rec:", bcubed.recall(ie_clusters_2.clusters[31], ie_clusters_2.gold_clusters[31]))
+    print("Clustering of 'dog':", ie_clusters_2.clusters[31])
+    print("Knows cognate groups:", ie_clusters_2.gold_clusters[31])
+    print("Prec:", bcubed.precision(ie_clusters_2.clusters[31], ie_clusters_2.gold_clusters[31]))
+    print("Rec:", bcubed.recall(ie_clusters_2.clusters[31], ie_clusters_2.gold_clusters[31]))
 
-print("Family           Threshold Precision Recall F-score")
-print("Barbacoan            .2  ", barb_clusters_2.score())
-print("Barbacoan            .4  ", barb_clusters_4.score())
-print("Eastern Austronesian .2  ", eau_clusters_2.score())
-print("Eastern Austronesian .4  ", eau_clusters_4.score())
-print("Indo-European        .2  ", ie_clusters_2.score())
-print("Indo-European        .4  ", ie_clusters_4.score())
+    print("Family           Threshold Precision Recall F-score")
+    print("Barbacoan            .2  ", barb_clusters_2.score())
+    print("Barbacoan            .4  ", barb_clusters_4.score())
+    print("Eastern Austronesian .2  ", eau_clusters_2.score())
+    print("Eastern Austronesian .4  ", eau_clusters_4.score())
+    print("Indo-European        .2  ", ie_clusters_2.score())
+    print("Indo-European        .4  ", ie_clusters_4.score())
 
-# Trying Eastern Austronesian data gives weird error - why?
-# Scores are the same with different thresholds + why?
+    # Trying Eastern Austronesian data gives weird error - why?
+    # Scores are the same with different thresholds + why?

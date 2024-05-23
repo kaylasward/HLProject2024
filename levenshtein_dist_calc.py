@@ -102,7 +102,9 @@ class LevenshteinDistanceCalculator:
 
         return all_word_scores
 
-    def calculate_dl_distance(self, input_word1, input_word2, threshold=4):
+    def calculate_dl_distance(
+        self, input_word1, input_word2, threshold=4, track_operations=False
+    ):
         """
         Calculates the Damerau-Levenshtein distance using the Wagner-Fischer algorithm.
 
@@ -116,6 +118,9 @@ class LevenshteinDistanceCalculator:
                 the minimum edit distance
                 a list of operations used to transform input_word1 to input_word2
         """
+        if input_word1 == input_word2:
+            return 0
+
         word1 = [""]
         word2 = [""]
 
@@ -123,8 +128,11 @@ class LevenshteinDistanceCalculator:
         word2.extend(self.__deconstruct_str(input_word2))
 
         # if the size difference is more than the limit, it's not worth checking
-        if abs(len(word1) - len(word2)) > threshold:
-            return -1, []
+        # if abs(len(word1) - len(word2)) > threshold:
+        #     if track_operations:
+        #         return -1, []
+        #     else:
+        #         return -1
 
         # init dl matrix and operation matrix
         dl_matrix = [[0] * (len(word2)) for _ in range(len(word1))]
@@ -170,31 +178,33 @@ class LevenshteinDistanceCalculator:
                     else:
                         op_matrix[i][j] = "S"  # substitution
 
-        # backtrack
-        i, j = len(word1) - 1, len(word2) - 1
-        operations = []
-
-        while i > 0 or j > 0:
-            if i > 0 and j > 0 and op_matrix[i][j] == "S":
-                operations.append(f"Substitute '{word1[i]}' with '{word2[j]}'")
-                i -= 1
-                j -= 1
-            elif i > 0 and op_matrix[i][j] == "D":
-                operations.append(f"Delete '{word1[i]}'")
-                i -= 1
-            elif j > 0 and op_matrix[i][j] == "I":
-                operations.append(f"Insert '{word2[j]}'")
-                j -= 1
-            else:
-                operations.append(f"Keep '{word2[j]}'")
-                i -= 1
-                j -= 1
-
-        operations.reverse()
-
         score = dl_matrix[-1][-1]
 
-        return score, operations
+        # backtrack
+        if track_operations:
+            i, j = len(word1) - 1, len(word2) - 1
+            operations = []
+
+            while i > 0 or j > 0:
+                if i > 0 and j > 0 and op_matrix[i][j] == "S":
+                    operations.append(f"Substitute '{word1[i]}' with '{word2[j]}'")
+                    i -= 1
+                    j -= 1
+                elif i > 0 and op_matrix[i][j] == "D":
+                    operations.append(f"Delete '{word1[i]}'")
+                    i -= 1
+                elif j > 0 and op_matrix[i][j] == "I":
+                    operations.append(f"Insert '{word2[j]}'")
+                    j -= 1
+                else:
+                    operations.append(f"Keep '{word2[j]}'")
+                    i -= 1
+                    j -= 1
+
+            operations.reverse()
+            return score, operations
+        else:
+            return score
 
     def __deconstruct_str(self, input_word):
         """

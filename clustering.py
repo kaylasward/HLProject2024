@@ -159,31 +159,25 @@ if __name__ == "__main__":
     ie_cognacy = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_cognacy.tab")
     ie_forms = TabFileReader.tab_reader("chl2024_iedata/chl2023_iedata_forms.tab")
 
-    barb_clusters_4 = Clustering(barb_forms, barb_cognacy, threshold=0.4)
-    barb_clusters_2 = Clustering(barb_forms, barb_cognacy, threshold=0.2)
-    eau_clusters_4 = Clustering(eau_forms, eau_cognacy, threshold=0.4)
-    eau_clusters_2 = Clustering(eau_forms, eau_cognacy, threshold=0.2)
-    ie_clusters_4 = Clustering(ie_forms, ie_cognacy, threshold=0.4)
-    ie_clusters_2 = Clustering(ie_forms, ie_cognacy, threshold=0.2)
+    barb_clusters = Clustering(barb_forms, barb_cognacy, threshold=0.8)
+    eau_clusters = Clustering(eau_forms, eau_cognacy, threshold=0.6)
+    ie_clusters = Clustering(ie_forms, ie_cognacy, threshold=0.8)
 
-    print("Clustering of 'dog':", ie_clusters_2.clusters[31])
-    print("Knows cognate groups:", ie_clusters_2.gold_clusters[31])
+    print("Clustering of 'dog':", ie_clusters.clusters[31])
+    print("Knows cognate groups:", ie_clusters.gold_clusters[31])
     print(
         "Prec:",
-        bcubed.precision(ie_clusters_2.clusters[31], ie_clusters_2.gold_clusters[31]),
+        bcubed.precision(ie_clusters.clusters[31], ie_clusters.gold_clusters[31]),
     )
     print(
         "Rec:",
-        bcubed.recall(ie_clusters_2.clusters[31], ie_clusters_2.gold_clusters[31]),
+        bcubed.recall(ie_clusters.clusters[31], ie_clusters.gold_clusters[31]),
     )
 
     print("Family           Threshold Precision Recall F-score")
-    print("Barbacoan            .2  ", barb_clusters_2.score())
-    print("Barbacoan            .4  ", barb_clusters_4.score())
-    print("Eastern Austronesian .2  ", eau_clusters_2.score())
-    print("Eastern Austronesian .4  ", eau_clusters_4.score())
-    print("Indo-European        .2  ", ie_clusters_2.score())
-    print("Indo-European        .4  ", ie_clusters_4.score())
+    print("Indo-European        .8  ", ie_clusters.score())
+    print("Barbacoan            .8  ", barb_clusters.score())
+    print("Eastern Austronesian .6  ", eau_clusters.score())
 
     # Trying Eastern Austronesian data gives weird error - why?
     # Scores are the same with different thresholds + why?

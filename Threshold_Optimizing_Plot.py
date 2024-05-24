@@ -34,10 +34,27 @@ def get_score_lists(cognacy_file, goldfile, thresholds:list):
 
 
 thresholds = [0,.1,.2,.3,.4,.5,.6,.7,.8,.9, 1]
-barb_precisions, barb_recalls, barb_fscores = get_score_lists(barb_forms, barb_cognacy, thresholds)
-eau_precisions, eau_recalls, eau_fscores = get_score_lists(eau_forms, eau_cognacy, thresholds)
-ie_precisions, ie_recalls, ie_fscores = get_score_lists(ie_forms, ie_cognacy, thresholds)
+barb_precisions, barb_recalls, barb_fscores = get_score_lists(
+    barb_forms, barb_cognacy, thresholds)
+eau_precisions, eau_recalls, eau_fscores = get_score_lists(
+    eau_forms, eau_cognacy, thresholds)
+ie_precisions, ie_recalls, ie_fscores = get_score_lists(
+    ie_forms, ie_cognacy, thresholds)
 
-print(ie_precisions)
-print(ie_recalls)
-print(ie_fscores)
+def plot(prec, rec, fscores, lang):
+    plt.figure(figsize=(10, 6))
+    plt.plot(
+        thresholds, prec, label='Precision', color='blue', marker='o')
+    plt.plot(
+        thresholds, rec, label='Recall', color='green', marker='^')
+    plt.plot(
+        thresholds, fscores, label='F-Score', color='red', marker='s')
+
+    plt.xlabel('Thresholds for the '+ lang + " language family", fontsize=18)
+    plt.legend()
+    plt.savefig("./plots/top_"+lang)
+    plt.show()
+
+plot(ie_precisions, ie_recalls, ie_fscores, "Indo-European")
+plot(barb_precisions, barb_recalls, barb_fscores, "Barbacoan")
+plot(eau_precisions, eau_recalls, eau_fscores, "Eastern Austronesian")

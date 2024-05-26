@@ -36,7 +36,11 @@ distance_metrics = [
     "global_alignment",
     "local_alignment",
 ]
-optimal_threshold = 0.2
+optimal_thresholds = {
+    "barb": 0.8,
+    "eau": 0.6,
+    "ie": 0.8,
+}
 
 
 precision_df = pd.DataFrame(columns=distance_metrics, index=form_data.keys())
@@ -48,7 +52,10 @@ for form_name, (forms, cognacy) in form_data.items():
         print(f"Calculating scores for {form_name} forms using {distance_metric}...")
 
         clusters = Clustering(
-            forms, cognacy, threshold=optimal_threshold, distance_metric=distance_metric
+            forms,
+            cognacy,
+            threshold=optimal_thresholds[form_name],
+            distance_metric=distance_metric,
         )
 
         precision, recall, f1 = clusters.score()
@@ -56,13 +63,32 @@ for form_name, (forms, cognacy) in form_data.items():
         recall_df.loc[form_name, distance_metric] = recall
         f1_df.loc[form_name, distance_metric] = f1
 
+legend_labels = [
+    "Levenshtein NLTK",
+    "Levenshtein Custom",
+    "Levenshtein Phonetic",
+    "Global Alignment",
+    "Local Alignment",
+]
+x_labels = [
+    "Barbacoan\n(threshold: 0.8)",
+    "Eastern Austronesian\n(threshold:0.6)",
+    "Indo-European\n(threshold:0.8)",
+]
 
-ax = precision_df.plot(kind="bar", figsize=(10, 5))
+ax = precision_df.plot(kind="bar", figsize=(12, 5), width=0.7)
 plt.title("Precision Scores")
-plt.xlabel("Form Data")
+# plt.xlabel("Form Data")
 plt.ylabel("Precision")
-plt.legend(title="Distance Metric")
+plt.legend(
+    title="Distance Metric",
+    labels=legend_labels,
+    bbox_to_anchor=(1.05, 1),
+    loc="upper left",
+)
 plt.xticks(rotation=0)
+plt.xticks(ticks=range(len(precision_df.index)), labels=x_labels)
+plt.ylim(0, 1.2)
 for p in ax.patches:
     ax.annotate(
         str(round(p.get_height(), 2)),
@@ -77,12 +103,19 @@ plt.savefig("./plots/precision_all")
 plt.show()
 
 
-ax = recall_df.plot(kind="bar", figsize=(10, 5))
+ax = precision_df.plot(kind="bar", figsize=(12, 5), width=0.7)
 plt.title("Recall Scores")
-plt.xlabel("Form Data")
+# plt.xlabel("Form Data")
 plt.ylabel("Recall")
-plt.legend(title="Distance Metric")
+plt.legend(
+    title="Distance Metric",
+    labels=legend_labels,
+    bbox_to_anchor=(1.05, 1),
+    loc="upper left",
+)
 plt.xticks(rotation=0)
+plt.xticks(ticks=range(len(precision_df.index)), labels=x_labels)
+plt.ylim(0, 1.2)
 for p in ax.patches:
     ax.annotate(
         str(round(p.get_height(), 2)),
@@ -97,12 +130,19 @@ plt.savefig("./plots/recall_all")
 plt.show()
 
 
-ax = f1_df.plot(kind="bar", figsize=(10, 5))
+ax = precision_df.plot(kind="bar", figsize=(12, 5), width=0.7)
 plt.title("F1 Scores")
-plt.xlabel("Form Data")
+# plt.xlabel("Form Data")
 plt.ylabel("F1 Score")
-plt.legend(title="Distance Metric")
+plt.legend(
+    title="Distance Metric",
+    labels=legend_labels,
+    bbox_to_anchor=(1.05, 1),
+    loc="upper left",
+)
 plt.xticks(rotation=0)
+plt.xticks(ticks=range(len(precision_df.index)), labels=x_labels)
+plt.ylim(0, 1.2)
 for p in ax.patches:
     ax.annotate(
         str(round(p.get_height(), 2)),

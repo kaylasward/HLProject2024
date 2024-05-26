@@ -103,7 +103,7 @@ plt.savefig("./plots/precision_all")
 plt.show()
 
 
-ax = precision_df.plot(kind="bar", figsize=(12, 5), width=0.7)
+ax = recall_df.plot(kind="bar", figsize=(12, 5), width=0.7)
 plt.title("Recall Scores")
 # plt.xlabel("Form Data")
 plt.ylabel("Recall")
@@ -114,7 +114,7 @@ plt.legend(
     loc="upper left",
 )
 plt.xticks(rotation=0)
-plt.xticks(ticks=range(len(precision_df.index)), labels=x_labels)
+plt.xticks(ticks=range(len(recall_df.index)), labels=x_labels)
 plt.ylim(0, 1.2)
 for p in ax.patches:
     ax.annotate(
@@ -130,7 +130,7 @@ plt.savefig("./plots/recall_all")
 plt.show()
 
 
-ax = precision_df.plot(kind="bar", figsize=(12, 5), width=0.7)
+ax = f1_df.plot(kind="bar", figsize=(12, 5), width=0.7)
 plt.title("F1 Scores")
 # plt.xlabel("Form Data")
 plt.ylabel("F1 Score")
@@ -141,7 +141,7 @@ plt.legend(
     loc="upper left",
 )
 plt.xticks(rotation=0)
-plt.xticks(ticks=range(len(precision_df.index)), labels=x_labels)
+plt.xticks(ticks=range(len(f1_df.index)), labels=x_labels)
 plt.ylim(0, 1.2)
 for p in ax.patches:
     ax.annotate(

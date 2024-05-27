@@ -76,7 +76,9 @@ x_labels = [
     "Indo-European\n(threshold:0.8)",
 ]
 
-ax = precision_df.plot(kind="bar", figsize=(12, 5), width=0.7)
+color_palette = ["#4daf4a", "#377eb8", "#ff7f00", "#984ea3", "#e41a1c"]
+
+ax = precision_df.plot(kind="bar", figsize=(12, 5), width=0.7, color=color_palette)
 plt.title("Precision Scores")
 # plt.xlabel("Form Data")
 plt.ylabel("Precision")
@@ -88,7 +90,7 @@ plt.legend(
 )
 plt.xticks(rotation=0)
 plt.xticks(ticks=range(len(precision_df.index)), labels=x_labels)
-plt.ylim(0, 1.2)
+plt.ylim(0, 1.05)
 for p in ax.patches:
     ax.annotate(
         str(round(p.get_height(), 2)),
@@ -103,7 +105,7 @@ plt.savefig("./plots/precision_all")
 plt.show()
 
 
-ax = recall_df.plot(kind="bar", figsize=(12, 5), width=0.7)
+ax = recall_df.plot(kind="bar", figsize=(12, 5), width=0.7, color=color_palette)
 plt.title("Recall Scores")
 # plt.xlabel("Form Data")
 plt.ylabel("Recall")
@@ -115,7 +117,7 @@ plt.legend(
 )
 plt.xticks(rotation=0)
 plt.xticks(ticks=range(len(recall_df.index)), labels=x_labels)
-plt.ylim(0, 1.2)
+plt.ylim(0, 1.05)
 for p in ax.patches:
     ax.annotate(
         str(round(p.get_height(), 2)),
@@ -130,7 +132,7 @@ plt.savefig("./plots/recall_all")
 plt.show()
 
 
-ax = f1_df.plot(kind="bar", figsize=(12, 5), width=0.7)
+ax = f1_df.plot(kind="bar", figsize=(12, 5), width=0.7, color=color_palette)
 plt.title("F1 Scores")
 # plt.xlabel("Form Data")
 plt.ylabel("F1 Score")
@@ -142,7 +144,7 @@ plt.legend(
 )
 plt.xticks(rotation=0)
 plt.xticks(ticks=range(len(f1_df.index)), labels=x_labels)
-plt.ylim(0, 1.2)
+plt.ylim(0, 1.05)
 for p in ax.patches:
     ax.annotate(
         str(round(p.get_height(), 2)),

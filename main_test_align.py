@@ -3,8 +3,8 @@ from alignment_calculator import AlignCalculator
 
 ac = AlignCalculator()
 
-word1 = "hamburger"
-word2 = "hammer"
+word1 = "kaapijula"
+word2 = "pisu"
 
 score, w1, w2 = ac.global_alignment(word1, word2)
 print("Global score:", score)

@@ -91,6 +91,7 @@ def main():#
         "chl2024_iedata/chl2023_iedata_forms.tab"
         )
     
+    #scoring stuff
     new_df = trim_all(ie_forms)
     
     from clustering import Clustering
@@ -113,12 +114,27 @@ def main():#
     print("Eastern Austronesian .6  ", eau_clusters.score())
     print("Eastern Austronesian .6  ", trimmed_eau_clusters.score())
     
+    from Threshold_Optimizing_Plot import get_score_lists,plot
+    
+    thresholds = [0,.1,.2,.3,.4,.5,.6,.7,.8,.9, 1]
+    barb_precisions, barb_recalls, barb_fscores = get_score_lists(
+        barb_trim_df, barb_cognacy, thresholds)
+    eau_precisions, eau_recalls, eau_fscores = get_score_lists(
+        eau_trim_df, eau_cognacy, thresholds)
+    ie_precisions, ie_recalls, ie_fscores = get_score_lists(
+        new_df, ie_cognacy, thresholds)
+    
+    plot(ie_precisions, ie_recalls, ie_fscores, "Indo-European-trimmed")
+    plot(barb_precisions, barb_recalls, barb_fscores, "Barbacoan-trimmed")
+    plot(eau_precisions, eau_recalls, eau_fscores, "Eastern Austronesian-trimmed")
+    
     #tests for what became the above functions.
     #print(ie_forms.iloc[32]) 
     ie_fixed = ie_forms.replace("'","ˈ",regex=True)
     #for row in ie_fixed.iterrows():
         #contents = row[1][1:]
-    row = ie_fixed.iloc[1][1:]
+    idx = 32
+    row = ie_fixed.iloc[idx][1:]
     print()
     print(row)
     no_empty = row[row != ''].to_list()
@@ -140,7 +156,7 @@ def main():#
             added = next(iter_trim_words)
             ie_fixed = ie_fixed.where(ie_fixed != item, added)
     
-    print(ie_fixed.iloc[1])
+    print(ie_fixed.iloc[idx])
     
     
 

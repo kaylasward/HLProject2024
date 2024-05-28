@@ -29,6 +29,7 @@ form_data = {
     "ie": (ie_forms, ie_cognacy),
 }
 
+## Add new metric #TODO
 distance_metrics = [
     "levenshtein_nltk",
     "levenshtein_custom",
@@ -36,6 +37,7 @@ distance_metrics = [
     "global_alignment",
     "local_alignment",
 ]
+
 optimal_thresholds = {
     "barb": 0.8,
     "eau": 0.6,
@@ -63,6 +65,7 @@ for form_name, (forms, cognacy) in form_data.items():
         recall_df.loc[form_name, distance_metric] = recall
         f1_df.loc[form_name, distance_metric] = f1
 
+## Add new label #TODO
 legend_labels = [
     "Levenshtein NLTK",
     "Levenshtein Custom",
@@ -70,12 +73,14 @@ legend_labels = [
     "Global Alignment",
     "Local Alignment",
 ]
+
 x_labels = [
     "Barbacoan\n(threshold: 0.8)",
     "Eastern Austronesian\n(threshold:0.6)",
     "Indo-European\n(threshold:0.8)",
 ]
 
+## Add any new color #TODO
 color_palette = ["#4daf4a", "#377eb8", "#ff7f00", "#984ea3", "#e41a1c"]
 
 ax = precision_df.plot(kind="bar", figsize=(12, 5), width=0.7, color=color_palette)

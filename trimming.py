@@ -49,8 +49,7 @@ def trim_all(form_data_frame, threshold=.5, strategy='core-oriented'):
     #Replaces apostrophes in input with primary stress marker in IPA (lingpy breaks without this)
     form_df_fixed = form_data_frame.replace("'","ˈ",regex=True)
     form_df_fixed = form_df_fixed.replace(":","ː",regex=True) #same but for length
-    #other items that throw errors, not sure how to handle this in a principled way since 
-    #I can't find their function in IPA, so just removing them.
+    #other items that throw errors, not sure how to handle this in a principled way so just removing them.
     df = form_df_fixed.replace("[;\(\)\[\]]","",regex=True)  
     
     for i, row in df.iterrows():

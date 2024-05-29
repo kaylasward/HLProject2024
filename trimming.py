@@ -5,6 +5,7 @@ from lingpy.align.multiple import mult_align
 import lingpy
 import lingrex
 import numpy as np
+import pandas as pd
 
 
 def trim(cog_set,threshold:float,strategy:str):
@@ -92,41 +93,83 @@ def main():#
         )
     
     #scoring stuff
-    new_df = trim_all(ie_forms)
+    new_df = trim_all(ie_forms,.75)
     
     from clustering import Clustering
-    ie_clusters = Clustering(ie_forms, ie_cognacy, threshold=0.8)
-    trimmed_ie_clusters = Clustering(new_df, ie_cognacy, threshold=0.8)
-    print("Indo-European        .8  ", ie_clusters.score())
-    print("trimmed Indo-European.8  ", trimmed_ie_clusters.score())
+    #ie_clusters = Clustering(ie_forms, ie_cognacy, threshold=0.8)
+    #trimmed_ie_clusters = Clustering(new_df, ie_cognacy, threshold=0.8)
+    #print("Indo-European        .8  ", ie_clusters.score())
+    #print("trimmed Indo-European.8  ", trimmed_ie_clusters.score())
     
-    barb_trim_df = trim_all(barb_forms)
+    #barb_trim_df = trim_all(barb_forms,.75)
     
-    barb_clusters = Clustering(barb_forms, barb_cognacy, threshold=0.8)
-    trimmed_barb_clusters = Clustering(barb_trim_df, barb_cognacy, threshold=0.8)
-    print("Barbacoan            .8  ", barb_clusters.score())
-    print("trimmed Barbacoan    .8  ", trimmed_barb_clusters.score())
+    #barb_clusters = Clustering(barb_forms, barb_cognacy, threshold=0.8)
+    #trimmed_barb_clusters = Clustering(barb_trim_df, barb_cognacy, threshold=0.8)
+    #print("Barbacoan            .8  ", barb_clusters.score())
+    #print("trimmed Barbacoan    .8  ", trimmed_barb_clusters.score())
     
-    eau_trim_df = trim_all(eau_forms)
+    #eau_trim_df = trim_all(eau_forms)
     
-    eau_clusters = Clustering(eau_forms, eau_cognacy, threshold=0.6)
-    trimmed_eau_clusters = Clustering(eau_trim_df, eau_cognacy, threshold=0.6)
-    print("Eastern Austronesian .6  ", eau_clusters.score())
-    print("Eastern Austronesian .6  ", trimmed_eau_clusters.score())
+    #eau_clusters = Clustering(eau_forms, eau_cognacy, threshold=0.6)
+    #trimmed_eau_clusters = Clustering(eau_trim_df, eau_cognacy, threshold=0.6)
+    #print("Eastern Austronesian .6  ", eau_clusters.score())
+    #print("Eastern Austronesian .6  ", trimmed_eau_clusters.score())
     
-    from Threshold_Optimizing_Plot import get_score_lists,plot
+    from Threshold_Optimizing_Plot import get_score_lists, plot
     
     thresholds = [0,.1,.2,.3,.4,.5,.6,.7,.8,.9, 1]
-    barb_precisions, barb_recalls, barb_fscores = get_score_lists(
-        barb_trim_df, barb_cognacy, thresholds)
-    eau_precisions, eau_recalls, eau_fscores = get_score_lists(
-        eau_trim_df, eau_cognacy, thresholds)
-    ie_precisions, ie_recalls, ie_fscores = get_score_lists(
-        new_df, ie_cognacy, thresholds)
     
-    plot(ie_precisions, ie_recalls, ie_fscores, "Indo-European-trimmed")
-    plot(barb_precisions, barb_recalls, barb_fscores, "Barbacoan-trimmed")
-    plot(eau_precisions, eau_recalls, eau_fscores, "Eastern Austronesian-trimmed")
+    ie_score_df = pd.DataFrame(columns=thresholds)
+    barb_score_df = pd.DataFrame(columns=thresholds)
+    eau_score_df = pd.DataFrame(columns=thresholds)
+    
+    ie_gap_score_df = pd.DataFrame(columns=thresholds)
+    barb_gap_score_df = pd.DataFrame(columns=thresholds)
+    eau_gap_score_df = pd.DataFrame(columns=thresholds)
+    
+    for i in thresholds:
+        new_df = trim_all(ie_forms,i)
+        barb_trim_df = trim_all(barb_forms,i)
+        eau_trim_df = trim_all(eau_forms,i)
+
+        barb_precisions, barb_recalls, barb_fscores = get_score_lists(
+            barb_trim_df, barb_cognacy, thresholds)
+        eau_precisions, eau_recalls, eau_fscores = get_score_lists(
+            eau_trim_df, eau_cognacy, thresholds)
+        ie_precisions, ie_recalls, ie_fscores = get_score_lists(
+            new_df, ie_cognacy, thresholds)
+        barb_score_df.loc[i]=barb_fscores
+        ie_score_df.loc[i]=ie_fscores
+        eau_score_df.loc[i]=eau_fscores
+        
+        new_gap_df = trim_all(ie_forms,i)
+        barb_gap_trim_df = trim_all(barb_forms,i)
+        eau_gap_trim_df = trim_all(eau_forms,i)
+
+        barb_precisions, barb_recalls, barb_gap_fscores = get_score_lists(
+            barb_gap_trim_df, barb_cognacy, thresholds)
+        eau_precisions, eau_recalls, eau_gap_fscores = get_score_lists(
+            eau_gap_trim_df, eau_cognacy, thresholds)
+        ie_precisions, ie_recalls, ie_gap_fscores = get_score_lists(
+            new_gap_df, ie_cognacy, thresholds)
+        barb_gap_score_df.loc[i]=barb_gap_fscores
+        ie_gap_score_df.loc[i]=ie_gap_fscores
+        eau_gap_score_df.loc[i]=eau_gap_fscores
+        break
+    print("barb")
+    print(barb_score_df)
+    print(barb_gap_score_df)
+    print("ie")
+    print(ie_score_df)
+    print(ie_gap_score_df)
+    print("eau")
+    print(eau_score_df)
+    print(eau_gap_score_df)
+    
+    
+    #plot(ie_precisions, ie_recalls, ie_fscores, "Indo-European-trimmed")
+    #plot(barb_precisions, barb_recalls, barb_fscores, "Barbacoan-trimmed")
+    #plot(eau_precisions, eau_recalls, eau_fscores, "Eastern Austronesian-trimmed")
     
     #tests for what became the above functions.
     #print(ie_forms.iloc[32]) 

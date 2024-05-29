@@ -142,9 +142,9 @@ def main():#
         ie_score_df.loc[i]=ie_fscores
         eau_score_df.loc[i]=eau_fscores
         
-        new_gap_df = trim_all(ie_forms,i)
-        barb_gap_trim_df = trim_all(barb_forms,i)
-        eau_gap_trim_df = trim_all(eau_forms,i)
+        new_gap_df = trim_all(ie_forms,i,"gap-oriented")
+        barb_gap_trim_df = trim_all(barb_forms,i,"gap-oriented")
+        eau_gap_trim_df = trim_all(eau_forms,i,"gap-oriented")
 
         barb_precisions, barb_recalls, barb_gap_fscores = get_score_lists(
             barb_gap_trim_df, barb_cognacy, thresholds)
@@ -155,15 +155,17 @@ def main():#
         barb_gap_score_df.loc[i]=barb_gap_fscores
         ie_gap_score_df.loc[i]=ie_gap_fscores
         eau_gap_score_df.loc[i]=eau_gap_fscores
-        break
-    print("barb")
+    print("barb core strat(rows:trim threshold, y:clustering threshold)")
     print(barb_score_df)
+    print("barb gap strat")
     print(barb_gap_score_df)
-    print("ie")
+    print("ie core")   
     print(ie_score_df)
+    print("ie gap")
     print(ie_gap_score_df)
-    print("eau")
+    print("eau core")
     print(eau_score_df)
+    print("eau gap")
     print(eau_gap_score_df)
     
     

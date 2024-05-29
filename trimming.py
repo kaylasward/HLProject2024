@@ -19,7 +19,7 @@ def trim(cog_set,threshold:float,strategy:str):
         threshold (float): percentage of members needed for index to be trimmed
         strategy (str): valid values "gap-oriented" or "core-oriented"
     Returns:
-        pd.DataFrame: dataframe with all items trimmed.
+        trimmed_words: list with all items trimmed
     """
     dense_cog = cog_set[cog_set != ''].to_list()
     
